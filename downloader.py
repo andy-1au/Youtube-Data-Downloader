@@ -13,15 +13,15 @@ def DASHDownload(link):
 
         videoObject = videoObject.streams.filter(adaptive=True).order_by('resolution').desc().first()
         print(videoObject) # debug
-        vtag = videoObject.itag 
-        print(str(vtag) + " is the itag of the video stream.") #debug
+        # vtag = videoObject.itag 
+        # print(str(vtag) + " is the itag of the video stream.") #debug
         videoObject.download(videoSavePath)
         
         print("\nDownloading Audio File..")
         audioObject = audioObject.streams.filter(only_audio=True).first()
         print(audioObject) #debug
-        atag = audioObject.itag
-        print(str(atag) + " is the itag of the audio stream.") #debug
+        # atag = audioObject.itag
+        # print(str(atag) + " is the itag of the audio stream.") #debug
         audioObject.download(audioSavePath)
       
         print("\nDownload complete.")
