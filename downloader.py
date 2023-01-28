@@ -1,9 +1,17 @@
-from pytube import YouTube
+from pytube import YouTube # for downloading videos
 from pytube.cli import on_progress # for progress bar in terminal
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.formatters import SRTFormatter
 
-videoSavePath = "C://Users//andyr//OneDrive - Lehigh University//DESKTOP//Projects//Workstudy//Special-Collections-Youtube-Downloader-Project//Videos Test Folder" #Insert save path for videos here
+from time import sleep
+from tqdm import tqdm
+import os
 
-audioSavePath = "C://Users//andyr//OneDrive - Lehigh University//DESKTOP//Projects//Workstudy//Special-Collections-Youtube-Downloader-Project//Audios Test Folder" #Insert save path for audio he
+videoSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video" #Insert save path for videos here
+
+audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/audio" #Insert save path for audio he
+
+transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/transcript/" #Insert save path for transcript here
 
 def DASHDownload(link): 
     videoObject = YouTube(link, on_progress_callback=on_progress)
@@ -30,5 +38,24 @@ def DASHDownload(link):
 
 # Add function to combine audio and video files
 
-link = input('Enter the youtube link:')
+def CaptionDownload(link):
+    try:
+        video_id = link.split("?v=")[1] # splits the link into a list and take the second element which is always the ID
+        srt = YouTubeTranscriptApi.get_transcript(video_id, languages=['en']) # get transcript english only
+        yt = YouTube(link)
+        video_title = yt.title
+        
+        print("\nDownloading transcript...")
+        for i in tqdm(range(10000)): # progress bar for transcript download
+            sleep(0.0001)
+        #formatter to convert transcript to SRT format
+        formatter = SRTFormatter()
+        savePath = os.path.join(transcriptSavePath, video_title+"_id:"+video_id+".txt")
+        with open(savePath, "w") as srt_file:
+            srt_file.write(formatter.format_transcript(srt))
+    except:
+        print('Error: Unable to download transcript.')
+     
+link = input('Enter the youtube link:')   
+CaptionDownload(link)
 DASHDownload(link)
