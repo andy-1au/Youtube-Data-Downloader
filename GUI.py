@@ -126,9 +126,10 @@ def mainWindow():
             else:
                 combineFiles(values['audioFile'], values['videoFile'], values['combineSP'])
                 #center the popup window
-                sg.popup('Combination Complete')
+                sg.popup('Files Successfully Combined')
 
     window.close()
 
-mainWindow()
 
+# Calls the main window
+mainWindow()

@@ -3,19 +3,19 @@ import ffmpeg
 from pytube import YouTube
 from pytube.cli import on_progress  # for progress bar in terminal
 
+from pathlib import Path
+
 #NOTE: This is a work in progress. I am still working on the combineFiles function. The combineFiles function is not working properly yet. I can't get it to take in file paths correctly. 
 
-def combineFiles(audioPath, videoPath, combineSP):
-    name = "January 2023 Message from President Joseph J. Helble"
+def combineFiles(audioPath, videoPath, fileName, combineSP):
+    
+    print(f"fileName: {fileName}")
 
     print("\nCombining audio and video files...")
 
-    # input_video = ffmpeg.input("Videos Test Folder\\January 2023 Message from President Joseph J Helble.webm")
-    # input_audio = ffmpeg.input("Audios Test Folder\\January 2023 Message from President Joseph J Helble.mp4")
     input_audio = ffmpeg.input(audioPath)
     input_video = ffmpeg.input(videoPath)
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(f"{combineSP}\\{name}.mp4").run(overwrite_output=True)
-    # f"{combineSP}\\{name}.mp4"
+    ffmpeg.concat(input_audio, input_video, v=1, a=1).output(f"{combineSP}\\{fileName}.mp4").run(overwrite_output=True)
 
 def downloadBoth(link, audioSP, videoSP):
     videoObject = YouTube(link, on_progress_callback=on_progress)
@@ -42,19 +42,19 @@ def downloadBoth(link, audioSP, videoSP):
 
         print("\nDownload complete.")
 
-        newAudioPath = f"{audioSP}\\{audioName}.mp4"
-        newVideoPath = f"{videoSP}\\{videoName}.webm"
+        newAudioPath = audioSP / f"{audioName}.mp4"
+        newVideoPath = videoSP / f"{videoName}.mp4"
 
-        return newAudioPath, newVideoPath
-        
+        return newAudioPath, newVideoPath, videoName
+
     except:
         print('Error: Unable to download video.')
 
 # Main Function 
 if __name__ == '__main__':
-    audioSP = "C:\\Users\\andyr\\OneDrive - Lehigh University\\DESKTOP\\Projects\\Workstudy\\Special-Collections-Youtube-Downloader-Project\\Audios Test Folder"
-    videoSP = "C:\\Users\\andyr\\OneDrive - Lehigh University\\DESKTOP\\Projects\\Workstudy\\Special-Collections-Youtube-Downloader-Project\\Videos Test Folder"
-    combineSP = "C:\\Users\\andyr\\OneDrive - Lehigh University\\DESKTOP\\Projects\\Workstudy\\Special-Collections-Youtube-Downloader-Project\\Combine Test Folder"
+    audioSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Audios Test Folder")
+    videoSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Videos Test Folder")
+    combineSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Combined Test Folder")
     link = input("Enter your link: ")
-    audioPath, videoPath = downloadBoth(link, audioSP, videoSP)
-    combineFiles(audioPath, videoPath, combineSP)
+    combineAudioPath, combineVideoPath, fileName = downloadBoth(link, audioSP, videoSP)
+    combineFiles(combineAudioPath, combineVideoPath, fileName, combineSP)
