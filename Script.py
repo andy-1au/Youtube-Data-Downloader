@@ -1,5 +1,4 @@
 import ffmpeg
-import PySimpleGUI as sg
 
 from pytube import YouTube
 from pytube.cli import on_progress  # for progress bar in terminal
