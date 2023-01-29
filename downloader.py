@@ -2,8 +2,9 @@ from pytube import YouTube
 from pytube.cli import on_progress # for progress bar in terminal
 
 videoSavePath = "C://Users//andyr//OneDrive - Lehigh University//DESKTOP//Projects//Workstudy//Special-Collections-Youtube-Downloader-Project//Videos Test Folder" #Insert save path for videos here
+audioSavePath = "C://Users//andyr//OneDrive - Lehigh University//DESKTOP//Projects//Workstudy//Special-Collections-Youtube-Downloader-Project//Audios Test Folder" #Insert save path for audio here
 
-audioSavePath = "C://Users//andyr//OneDrive - Lehigh University//DESKTOP//Projects//Workstudy//Special-Collections-Youtube-Downloader-Project//Audios Test Folder" #Insert save path for audio he
+linkList = [] 
 
 def DASHDownload(link): 
     videoObject = YouTube(link, on_progress_callback=on_progress)
