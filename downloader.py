@@ -13,31 +13,6 @@ audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader
 
 transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/transcript/" #Insert save path for transcript here
 
-def DASHDownload(link): 
-    videoObject = YouTube(link, on_progress_callback=on_progress)
-    audioObject = YouTube(link, on_progress_callback=on_progress)
-    try:
-        print("\nDownloading Video File...")
-
-        videoObject = videoObject.streams.filter(adaptive=True).order_by('resolution').desc().first()
-        print(videoObject) # debug
-        # vtag = videoObject.itag 
-        # print(str(vtag) + " is the itag of the video stream.") #debug
-        videoObject.download(videoSavePath)
-        
-        print("\nDownloading Audio File..")
-        audioObject = audioObject.streams.filter(only_audio=True).first()
-        print(audioObject) #debug
-        # atag = audioObject.itag
-        # print(str(atag) + " is the itag of the audio stream.") #debug
-        audioObject.download(audioSavePath)
-      
-        print("\nDownload complete.")
-    except:
-        print('Error: Unable to download video.')
-
-# Add function to combine audio and video files
-
 def CaptionDownload(link):
     try:
         video_id = link.split("?v=")[1] # splits the link into a list and take the second element which is always the ID
@@ -55,7 +30,8 @@ def CaptionDownload(link):
             srt_file.write(formatter.format_transcript(srt))
     except:
         print('Error: Unable to download transcript.')
+        
+
      
 link = input('Enter the youtube link:')   
 CaptionDownload(link)
-DASHDownload(link)
