@@ -9,7 +9,7 @@ import os
 
 videoSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video" #Insert save path for videos here
 
-audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/audio" #Insert save path for audio he
+audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/audio" #Insert save path for audio here
 
 transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/transcript/" #Insert save path for transcript here
 
