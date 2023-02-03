@@ -1,7 +1,11 @@
 from pytube import YouTube # for downloading videos
+from pytube import Playlist # for downloading playlists
+
 from pytube.cli import on_progress # for progress bar in terminal
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api.formatters import SRTFormatter
+
+from pyyoutube import Api # for getting youtube video data
 
 from time import sleep
 from tqdm import tqdm
@@ -12,6 +16,8 @@ videoSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader
 audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/audio" #Insert save path for audio here
 
 transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/transcript/" #Insert save path for transcript here
+
+api = Api(api_key="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg")
 
 def CaptionDownload(link):
     try:
@@ -30,8 +36,8 @@ def CaptionDownload(link):
             srt_file.write(formatter.format_transcript(srt))
     except:
         print('Error: Unable to download transcript.')
-        
 
-     
+    
+
 link = input('Enter the youtube link:')   
 CaptionDownload(link)
