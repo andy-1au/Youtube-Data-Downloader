@@ -1,41 +1,37 @@
+#Python Modules
+from pathlib import Path
+import os
+import re # for regex
+
+#Other Modules
 from pytube import YouTube
 from pytube.cli import on_progress  # for progress bar in terminal
-from pathlib import Path
 import ffmpeg
-import moviepy.editor as mp
-import os
+import PySimpleGUI as sg
 
-#NOTE: This is a work in progress. I am still working on the combineFiles function. The combineFiles function is not working properly yet. I can't get it to take in file paths correctly. 
-
-# def combineFiles(audioPath, videoPath, fileName, combineSP):
+def combineFiles(audioPath, videoPath, combineSP, fileName):
     
-#     # print(f"\nfileName: {fileName}")
-
-#     print("\nCombining audio and video files...")
+    print("\nCombining audio and video files...")
+    print("---------------------------------------------------------")
+    print(f"\nfileName: {fileName}")
+    print("---------------------------------------------------------")
+    outputfile = os.path.join(combineSP, f"{fileName}.mp4")
+    print("Output File: " + str(outputfile))
     
-#     audiofile = os.path.abspath(f"{audioPath}")
-#     videofile = os.path.abspath(f"{videoPath}")
-#     outputfile = os.path.abspath(f"{combineSP}\\{fileName}.mp4")
-#     ffmpegPath = Path("C:/Program Files/ffmpeg/bin/ffmpeg.exe")
-    
-#     print(f"\nAudio File: {audiofile}")
-#     print (f"Video File: {videofile}")
-#     print(f"Output File: {outputfile}")
-    
-#     # codec = "copy"
-#     # os.chmod(ffmpegPath, 755)
-#     # subprocess.run(f"ffmpeg -i {videofile} -i {audiofile} -c {codec} {outputfile}")
+    # print(f"\nAudio File: {audiofile}") #debug
+    # print (f"Video File: {videofile}") #debug
+    # print(f"Output File: {outputfile}") #debug
 
-#     input_audio = ffmpeg.input(audioPath)
-#     input_video = ffmpeg.input(videoPath)
-#     # ffmpeg.concat(input_audio, input_video, v=1, a=1).output(f"{combineSP}\\{fileName}.mp4").run(overwrite_output=True)
-#     ffmpeg.concat(input_audio, input_video, v=1, a=1).output(f"{combineSP}\\{fileName}.mp4").run(overwrite_output=True)
+    input_video = ffmpeg.input(videoPath)
+    input_audio = ffmpeg.input(audioPath)
+    print("---------------------------------------------------------")
+    print("Input Video: " + str(input_video))
+    print("Input Audio: " + str(input_audio))
+    print("---------------------------------------------------------")
 
-def combine_audio_video(audio_path, video_path, output_path, name):
-    audio = mp.AudioFileClip(str(audio_path))
-    video = mp.VideoFileClip(str(video_path))
-    final_clip = mp.concatenate_videoclips([video.set_audio(audio)])
-    final_clip.write_videofile(str(output_path / (name + '.mp4')))
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile).run(overwrite_output=True)
+
+    print("\nCombining complete.")
 
 def downloadBoth(link, audioSP, videoSP):
     videoObject = YouTube(link, on_progress_callback=on_progress)
@@ -43,10 +39,12 @@ def downloadBoth(link, audioSP, videoSP):
     try:
         print("\nDownloading Video File...")
 
-        videoObject = videoObject.streams.filter(adaptive=True).order_by('resolution').desc().first()
+        videoObject = videoObject.streams.filter(adaptive=True, file_extension='mp4').order_by('resolution').desc().first()
         print(videoObject)  # debug
         videoName = videoObject.title
-        # print(videoName) #debug
+        #delete special characters from video name to avoid errors
+        videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName)
+        print(videoName) #debug
         # vtag = videoObject.itag #debug
         # print(str(vtag) + " is the itag of the video stream.") #debug
         videoObject.download(videoSP)
@@ -55,15 +53,16 @@ def downloadBoth(link, audioSP, videoSP):
         audioObject = audioObject.streams.filter(only_audio=True).first()
         print(audioObject)  # debug
         audioName = audioObject.title
-        # print(audioName) #debug
+        audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
+        print(audioName) #debug
         # atag = audioObject.itag #debug
         # print(str(atag) + " is the itag of the audio stream.") #debug
         audioObject.download(audioSP)
 
         print("\nDownload complete.")
 
-        newAudioPath = audioSP / f"{audioName}.mp4"
-        newVideoPath = videoSP / f"{videoName}.webm"
+        newAudioPath = Path(audioSP, f"{audioName}.mp4")
+        newVideoPath = Path(videoSP, f"{videoName}.mp4")
 
         return newAudioPath, newVideoPath, videoName
 
@@ -74,7 +73,7 @@ def downloadBoth(link, audioSP, videoSP):
 if __name__ == '__main__':
     audioSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Audios Test Folder")
     videoSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Videos Test Folder")
-    combineSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Combined Test Folder")
+    combineSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Combine Test Folder")
     link = input("Enter your link: ")
     combineAudioPath, combineVideoPath, fileName = downloadBoth(link, audioSP, videoSP)
-    combine_audio_video(combineAudioPath, combineVideoPath, combineSP, fileName)
+    combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
