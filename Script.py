@@ -66,14 +66,23 @@ def downloadBoth(link, audioSP, videoSP):
 
         return newAudioPath, newVideoPath, videoName
 
-    except:
-        print('Error: Unable to download video.')
+    except Exception as e:
+        print('Error: Unable to download audio and video files:', e)
+        return None
+
 
 # Main Function 
 if __name__ == '__main__':
-    audioSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Audios Test Folder")
-    videoSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Videos Test Folder")
-    combineSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Combine Test Folder")
+    #NOTE: When using a new path, make sure to replace the backslash with forward slash. 
+    # audioSP = Path("Insert Path Here")
+    # videoSP = Path("Insert Path Here")
+    # combineSP = Path("Insert Path Here")
+    # audioSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Audios Test Folder")
+    # videoSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Videos Test Folder")
+    # combineSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Combine Test Folder")
+    audioSP = Path("C:/Users/indigit/DesktopSpecial-Collections-Youtube-Downloader-Project/Audios Test Folder")
+    videoSP = Path("C:/Users/indigit/Desktop/Special-Collections-Youtube-Downloader-Project/Videos Test Folder")
+    combineSP = Path("C:/Users/indigit/Desktop/Special-Collections-Youtube-Downloader-Project/Combine Test Folder")
     link = input("Enter your link: ")
     combineAudioPath, combineVideoPath, fileName = downloadBoth(link, audioSP, videoSP)
-    combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
+    # combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
