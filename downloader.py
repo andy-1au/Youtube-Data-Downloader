@@ -7,7 +7,7 @@ from youtube_transcript_api.formatters import SRTFormatter      # for converting
 
 from time import sleep      # for progress bar
 from tqdm import tqdm       # for progress bar
-import os                   # for saving files
+import os, sys              # for saving files
 import googleapiclient.discovery # what is the googleapiclient.discovery module? https://developers.google.com/youtube/v3/docs/playlists/list
 import json                # for converting to json format
 
@@ -97,31 +97,48 @@ def requestVideoData(video_id): # get video data from video ID using YouTubeData
         print("Error: Unable to get video data.")
     return response
 
-
 link = input("Enter the link to a youtube video: ") # get link from user
  
 channel_id = getChannelID(link) # get channel ID from link
 
-playlist_ids = getRequestPlaylistID(channel_id) # get playlist ID from channel ID
 
-
-for i in playlist_ids:
-    videos =  getVideoID_from_playlist(i) # get video ID from playlist ID
-    for video in videos:
-        # print(video)
-        getVideoData = requestVideoData(video)
-        getVideoData = json.dumps(getVideoData, indent = 3, sort_keys=True) # convert to json format and sort by keys
-        json_Data = json.loads(getVideoData).get("items")
-        
-        if(json_Data == []): # if the video is private, it will return an empty list
-            print(json_Data)
-        else:
-            video_title = json_Data[0].get("snippet").get("title")
-            if(video_title.find("/") != -1):
-                video_title = video_title.replace("/", "-")
-            savePath = os.path.join(video_infoPath, video_title+".json")
-            with open(savePath, "w") as video_info:
-                video_info.write(getVideoData)
-        
+def jsonFormatter(video_data):
+    video_data = json.dumps(video_data, indent = 3, sort_keys=True) # convert to json format and sort by keys
+    json_Data = json.loads(video_data).get("items")
+    if(json_Data == []): # if the video is private, it will return an empty list
+        print(json_Data)
+    else:
+        video_title = json_Data[0].get("snippet").get("title")
+        if(video_title.find("/") != -1):
+            video_title = video_title.replace("/", "-")
+        savePath = os.path.join(video_infoPath, video_title+".json")
+        with open(savePath, "w") as video_info:
+            video_info.write(video_data)
     
+request = youtube.channels().list(
+    part="contentDetails",
+    id= channel_id
+)
 
+response = request.execute()
+for item in response["items"]:
+    print(item)
+    playlist_id = item["contentDetails"]["relatedPlaylists"]["uploads"]
+    next_page_token = ''
+    while(next_page_token != None):
+        print("Next Page Token: ", next_page_token)
+        playlistRespone = youtube.playlistItems().list(
+            part="snippet",
+            playlistId=playlist_id,
+            maxResults=50,
+            pageToken = next_page_token
+        )
+        playlistResponse = playlistRespone.execute()
+        for idx, playlistItem in enumerate(playlistResponse['items']):
+            video_id = playlistItem['snippet']['resourceId']['videoId']
+            video_data = requestVideoData(video_id)
+            jsonFormatter(video_data)
+            if 'nextPageToken' in playlistResponse.keys():
+                next_page_token = playlistResponse['nextPageToken']
+            else:
+                next_page_token = None
