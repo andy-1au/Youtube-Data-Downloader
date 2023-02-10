@@ -73,16 +73,18 @@ def downloadBoth(link, audioSP, videoSP):
 
 # Main Function 
 if __name__ == '__main__':
-    #NOTE: When using a new path, make sure to replace the backslash with forward slash. 
+
+    #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
+
     # audioSP = Path("Insert Path Here")
     # videoSP = Path("Insert Path Here")
     # combineSP = Path("Insert Path Here")
     # audioSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Audios Test Folder")
     # videoSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Videos Test Folder")
     # combineSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Combine Test Folder")
-    audioSP = Path("C:/Users/indigit/DesktopSpecial-Collections-Youtube-Downloader-Project/Audios Test Folder")
-    videoSP = Path("C:/Users/indigit/Desktop/Special-Collections-Youtube-Downloader-Project/Videos Test Folder")
-    combineSP = Path("C:/Users/indigit/Desktop/Special-Collections-Youtube-Downloader-Project/Combine Test Folder")
     link = input("Enter your link: ")
+    audioSP = Path("Audios Test Folder")
+    videoSP = Path("Videos Test Folder")
+    combineSP = Path("Combine Test Folder")
     combineAudioPath, combineVideoPath, fileName = downloadBoth(link, audioSP, videoSP)
-    # combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
+    combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
