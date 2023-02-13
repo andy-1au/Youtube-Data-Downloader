@@ -10,7 +10,11 @@ import ffmpeg
 import PySimpleGUI as sg
 
 # Write parseID function here
-
+def parseID(file):
+    readFile = open(file, 'r')
+    id_list = readFile.readlines()
+    print(id_list)
+    
 def combineFiles(audioPath, videoPath, combineSP, fileName):
     
     print("\nCombining audio and video files...")
@@ -84,15 +88,20 @@ if __name__ == '__main__':
     # audioSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Audios Test Folder")
     # videoSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Videos Test Folder")
     # combineSP = Path("C:/Users/andyr/OneDrive - Lehigh University/DESKTOP/Projects/Workstudy/Youtube-Downloader-Project/Combine Test Folder")
-    audioSP = Path("Audios Test Folder")
-    videoSP = Path("Videos Test Folder")
-    combineSP = Path("Combine Test Folder")
-    link = input("Enter your link: ")
     # audioSP = Path("C:/Users/indigit/Desktop/Special-Collections-Youtube-Downloader-Project/Audios Test Folder")
     # videoSP = Path("C:/Users/indigit/Desktop/Special-Collections-Youtube-Downloader-Project/Videos Test Folder")
     # combineSP = Path("C:/Users/indigit/Desktop/Special-Collections-Youtube-Downloader-Project/Combine Test Folder")
-    combineAudioPath, combineVideoPath, fileName = downloadBoth(link, audioSP, videoSP)
-    combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
+
+    audioSP = Path("Audios Test Folder")
+    videoSP = Path("Videos Test Folder")
+    combineSP = Path("Combine Test Folder")
+    # link = input("Enter your link: ")
+    
+
+    # combineAudioPath, combineVideoPath, fileName = downloadBoth(link, audioSP, videoSP)
+    # combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
+
+    parseID("video_ids.txt")
 
 
 #test comment 
