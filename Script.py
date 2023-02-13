@@ -11,10 +11,10 @@ import PySimpleGUI as sg
 
 # Write parseID function here
 def parseID(file):
-    readFile = open(file, 'r')
-    id_list = readFile.readlines()
-    print(id_list)
-    
+    with open(file) as f: # 'with' closes the file for you
+        id_list = [line.rstrip() for line in f]
+    print(f"IDs: {id_list}") #DEBUG
+
 def combineFiles(audioPath, videoPath, combineSP, fileName):
     
     print("\nCombining audio and video files...")
