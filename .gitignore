@@ -2,5 +2,5 @@ Audios Folder
 Videos Folder
 Combine Folder
 Video IDs
-video_ids.txt
+*.txt
 Makefile
