@@ -11,9 +11,13 @@ import PySimpleGUI as sg
 
 # Write parseID function here
 def parseID(file):
-    with open(file) as f: # 'with' closes the file for you
-        id_list = [line.rstrip() for line in f]
-    print(f"IDs: {id_list}") #DEBUG
+    default_link = "https://www.youtube.com/watch?v="
+    with open(file, 'r') as f: # 'with' closes the file for you
+        id_list = [line.rstrip() for line in f] #removes the newline character from the end of each line
+        link_list = [{default_link + id} for id in id_list] # creates a list of links from the list of ids
+    # print(f"IDs: {id_list}") #DEBUG
+    # print(f"Links: {link_list}") #DEBUG
+    return link_list 
 
 def combineFiles(audioPath, videoPath, combineSP, fileName):
     
@@ -81,7 +85,9 @@ def downloadBoth(link, audioSP, videoSP):
 if __name__ == '__main__':
 
     #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
+    parseID("video_ids.txt")
 
+    # combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
     # audioSP = Path("Insert Path Here")
     # videoSP = Path("Insert Path Here")
     # combineSP = Path("Insert Path Here")
@@ -99,9 +105,7 @@ if __name__ == '__main__':
     
 
     # combineAudioPath, combineVideoPath, fileName = downloadBoth(link, audioSP, videoSP)
-    # combineFiles(combineAudioPath, combineVideoPath, combineSP, fileName)
 
-    parseID("video_ids.txt")
 
 
 #test comment 
