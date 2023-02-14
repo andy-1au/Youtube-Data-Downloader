@@ -50,7 +50,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Preparing Next Link...\n")
 
-def multithreadDownload(audioSP, videoSP, combineSP, ytLinks):   
+def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks):   
     def downloadBoth(link):
         try:
             print(f"Downloading From: {link}") #DEBUG
@@ -96,6 +96,7 @@ def multithreadDownload(audioSP, videoSP, combineSP, ytLinks):
         except Exception as e:
             print('Error: Unable to download audio and video files:', e)
             return None
+            exit()
 
     threads = [] #creates a list of threads
     for link in ytLinks:
@@ -110,7 +111,7 @@ def multithreadDownload(audioSP, videoSP, combineSP, ytLinks):
     for thread in threads:
         thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
 
-def downloadBoth(audioSP, videoSP, combineSP, ytLinks):   
+def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks):   
     for link in ytLinks: 
         try:
             link = str(link) #converts the list of links into a string for the function below
@@ -178,8 +179,8 @@ if __name__ == '__main__':
     # link = input("Enter your link: ")
 
     # multi-threading function
-    multithreadDownload(audioSP, videoSP, combineSP, ytLinks)
+    multiThreadDownload(audioSP, videoSP, combineSP, ytLinks)
 
-    #single-threading function
-    downloadBoth(audioSP, videoSP, combineSP, ytLinks)
+    #single-threading function (~5:32)
+    # singleThreadDownload(audioSP, videoSP, combineSP, ytLinks)
 
