@@ -101,8 +101,64 @@ def multithreadDownload(audioSP, videoSP, combineSP, ytLinks):
     for link in ytLinks:
         link = str(link) #converts the list of links into a string for the function below
         link = link[2:-2] #removes first two and last two characters from the string, {} and ''
-        t = threading.Thread(target=downloadBoth, args=(link,)) #creates a thread for each link
+        #creates a thread for each link, and passes the link as an argument
+        #comma is needed after the argument, even if there is only one argument because it is a tuple
+        thread = threading.Thread(target=downloadBoth, args=(link,)) 
+        threads.append(thread) #adds the thread to the list of threads
+        thread.start() #starts the thread
+    
+    for thread in threads:
+        thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
 
+def downloadBoth(audioSP, videoSP, combineSP, ytLinks):   
+    for link in ytLinks: 
+        try:
+            link = str(link) #converts the list of links into a string for the function below
+            link = link[2:-2] #removes first two and last two characters from the string, {} and ''
+            print(f"Downloading From: {link}") #DEBUG
+            print("---------------------------------------------------------")
+
+            print("\nDownloading Video File...")
+            videoObject = YouTube(link, on_progress_callback=on_progress)
+            audioObject = YouTube(link, on_progress_callback=on_progress)
+
+            videoObject = videoObject.streams.filter(adaptive=True, file_extension='mp4').order_by('resolution').desc().first()
+
+            print(f"Video Object: {videoObject}") #DEBUG
+            videoName = videoObject.title
+        
+            videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
+            print(f"Video Name: {videoName}") #DEBUG
+            # vtag = videoObject.itag #DEBUG
+            # print(str(vtag) + " is the itag of the video stream.") #DEBUG
+            videoObject.download(videoSP)
+            print("Video Download Complete.")
+            print("---------------------------------------------------------")
+
+            print("\nDownloading Audio File..")
+            audioObject = audioObject.streams.filter(only_audio=True).first()
+
+            print(f"Audio Object: {audioObject}") #DEBUG
+            audioName = audioObject.title
+
+            audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
+            print(f"Audio Name: {audioName}") #DEBUG
+            # atag = audioObject.itag #DEBUG
+            # print(str(atag) + " is the itag of the audio stream.") #DEBUG
+            audioObject.download(audioSP)
+            print("Audio Download Complete.")
+            print("\nBoth Download complete.")
+            print("---------------------------------------------------------")
+
+            newAudioPath = Path(audioSP, f"{audioName}.mp4")
+            newVideoPath = Path(videoSP, f"{videoName}.mp4")
+
+            combineFiles(newAudioPath, newVideoPath, combineSP, videoName) 
+
+        except Exception as e:
+            print('Error: Unable to download audio and video files:', e)
+            return None
+        
 # Main Function 
 if __name__ == '__main__':
 
@@ -120,4 +176,10 @@ if __name__ == '__main__':
     ytLinks = parseID("video_ids.txt")
 
     # link = input("Enter your link: ")
+
+    # multi-threading function
     multithreadDownload(audioSP, videoSP, combineSP, ytLinks)
+
+    #single-threading function
+    downloadBoth(audioSP, videoSP, combineSP, ytLinks)
+
