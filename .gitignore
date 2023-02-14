@@ -1,6 +1,12 @@
 Audios Test Folder
 Videos Test Folder
 Combine Test Folder
+Audios Folder
+Videos Folder
+Combine Folder
 transcript
 audio
 video
+Video IDs
+*.txt
+Makefile
