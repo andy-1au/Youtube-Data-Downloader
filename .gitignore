@@ -7,5 +7,4 @@ Combine Test Folder
 Video IDs
 Scripts/__pycache__
 *.txt
-Makefile
 test.py
