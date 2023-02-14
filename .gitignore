@@ -2,5 +2,7 @@ Audios Folder
 Videos Folder
 Combine Folder
 Video IDs
+Scripts/__pycache__
 *.txt
 Makefile
+test.py
