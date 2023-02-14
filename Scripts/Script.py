@@ -39,7 +39,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("\nInput Audio: " + str(input_audio))
     print("---------------------------------------------------------")
 
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile).run(overwrite_output=True)
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, threads=8).run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -178,9 +178,17 @@ if __name__ == '__main__':
 
     # link = input("Enter your link: ")
 
-    # multi-threading function
+    # multi-threading function 
+    #2 threads: 3:43
+    #4 threads: ----
+    #6 threads: 2:55
+    #8 threads: 2:52
     multiThreadDownload(audioSP, videoSP, combineSP, ytLinks)
 
-    #single-threading function (~5:32)
+    #single-threading function 
+    #2 threads: 
+    #4 threads: 4:30
+    #6 threads: ----
+    #8 threads: 3:30
     # singleThreadDownload(audioSP, videoSP, combineSP, ytLinks)
 
