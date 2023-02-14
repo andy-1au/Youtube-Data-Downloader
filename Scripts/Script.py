@@ -2,6 +2,7 @@
 from pathlib import Path
 import os
 import re # for regex
+import threading # for multithreading
 
 #Other Modules
 from pytube import YouTube
@@ -49,11 +50,9 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Preparing Next Link...\n")
 
-def downloadBoth(audioSP, videoSP, combineSP, ytLinks):   
-    for link in ytLinks: 
+def multithreadDownload(audioSP, videoSP, combineSP, ytLinks):   
+    def downloadBoth(link):
         try:
-            link = str(link) #converts the list of links into a string for the function below
-            link = link[2:-2] #removes first two and last two characters from the string, {} and ''
             print(f"Downloading From: {link}") #DEBUG
             print("---------------------------------------------------------")
 
@@ -98,6 +97,12 @@ def downloadBoth(audioSP, videoSP, combineSP, ytLinks):
             print('Error: Unable to download audio and video files:', e)
             return None
 
+    threads = [] #creates a list of threads
+    for link in ytLinks:
+        link = str(link) #converts the list of links into a string for the function below
+        link = link[2:-2] #removes first two and last two characters from the string, {} and ''
+        t = threading.Thread(target=downloadBoth, args=(link,)) #creates a thread for each link
+
 # Main Function 
 if __name__ == '__main__':
 
@@ -115,4 +120,4 @@ if __name__ == '__main__':
     ytLinks = parseID("video_ids.txt")
 
     # link = input("Enter your link: ")
-    downloadBoth(audioSP, videoSP, combineSP, ytLinks)
+    multithreadDownload(audioSP, videoSP, combineSP, ytLinks)
