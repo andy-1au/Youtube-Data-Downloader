@@ -1,0 +1,38 @@
+Test Batch IDs: 
+W-UusnlOxRM
+NN-hWbgcILA
+7Rll0lspS6M
+
+NOTE: in the ffmpeg.output function, threads are applied 
+NOTE: for multi-threading, I added my own threads (not sure if I will still use the thread parameter in output(), will be testing that)
+UPDATE: specifying threads in output function doesn't matter, ffmpeg defaults to the most optimal 
+UPDATE: h264_nvenc is slower by about 25%, but windows can play without extra applications
+
+Multi-threading
+Indigit PC
+    -----------------------
+    2 threads: 3:43
+    4 threads: ----
+    6 threads: 2:55
+    8 threads: 2:52
+
+Single-threading 
+    Indigit PC
+    -----------------------
+    2 threads: ----
+    4 threads: 4:30
+    6 threads: ----
+    8 threads: 3:30
+
+Single-threading 
+    Quadro P1 GPU, Xeon CPU
+    -----------------------
+    No threads: 00:56 (h264_nvenc)
+    No threads: 00:53 (hevc_nvenc)
+
+Multi-threading
+    Quadro P1 GPU, Xeon CPU
+    -----------------------
+    No threads: 00:50 (h264_nvenc)
+    No threads: 00:40 (hevc_nvenc)
+    

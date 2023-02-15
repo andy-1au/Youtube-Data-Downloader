@@ -3,12 +3,16 @@ from pathlib import Path
 import os
 import re # for regex
 import threading # for multithreading
+import time
+from datetime import timedelta 
 
 #Other Modules
 from pytube import YouTube
 from pytube.cli import on_progress  # for progress bar in terminal
 import ffmpeg
 import PySimpleGUI as sg
+
+#Next thing to do: change names of videos to the their respective IDs
 
 def parseID(file):
     default_link = "https://www.youtube.com/watch?v="
@@ -39,7 +43,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("\nInput Audio: " + str(input_audio))
     print("---------------------------------------------------------")
 
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, threads=8).run(overwrite_output=True)
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -111,7 +115,7 @@ def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks):
     for thread in threads:
         thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
 
-def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks):   
+def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks):
     for link in ytLinks: 
         try:
             link = str(link) #converts the list of links into a string for the function below
@@ -172,23 +176,19 @@ if __name__ == '__main__':
     audioSP = Path("Audios Folder")
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
-
     
     ytLinks = parseID("video_ids.txt")
 
     # link = input("Enter your link: ")
 
-    # multi-threading function 
-    #2 threads: 3:43
-    #4 threads: ----
-    #6 threads: 2:55
-    #8 threads: 2:52
-    multiThreadDownload(audioSP, videoSP, combineSP, ytLinks)
 
-    #single-threading function 
-    #2 threads: 
-    #4 threads: 4:30
-    #6 threads: ----
-    #8 threads: 3:30
+    start = time.time()
+
+    multiThreadDownload(audioSP, videoSP, combineSP, ytLinks)
     # singleThreadDownload(audioSP, videoSP, combineSP, ytLinks)
 
+    end = time.time()
+
+    total_time = end - start
+    formatted_time = str(timedelta(seconds=total_time))
+    print(f"\nTotal Time: {formatted_time}")
