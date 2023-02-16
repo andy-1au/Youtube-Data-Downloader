@@ -27,7 +27,11 @@ youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyB
 
 def getVideoID(link):
     video_id = link.split("?v=")[1] # splits the link into a list and take the second element which is always the ID
+    if(video_id.find("&") != -1): # if the video ID has a & in it it means there is a & with channel ID
+        video_id = video_id.split("&")[0] # split the video ID by the & and take the first element which is always the video ID
+    print(video_id)
     return video_id
+
 
 def CaptionDownload(video_id):
     try:
@@ -83,42 +87,42 @@ def jsonFormatter(video_data):
         with open(savePath, "w") as video_info:
             video_info.write(video_data)
 
-request = youtube.channels().list( # get request the channel data using the channel ID to get the play ID of the uploads playlist
-    part="contentDetails",
-    id= channel_id
-)
+def download(channel_id):
+    request = youtube.channels().list( # get request the channel data using the channel ID to get the play ID of the uploads playlist
+        part="snippet,contentDetails",
+        id= channel_id
+    )
+    
+    response = request.execute()
+    channel_title = response["items"][0]["snippet"]["title"]
+    for item in response["items"]:
+        # print(item)
+        playlist_id = item["contentDetails"]["relatedPlaylists"]["uploads"] # get the playlist ID of the uploads playlist
+        next_page_token = '' # set the next page token to an empty string
+        while(next_page_token != None): # while there is a next page token to get get the next 50 videos
+            # print("Next Page Token: ", next_page_token)
+            playlistRespone = youtube.playlistItems().list(
+                part="snippet",
+                playlistId=playlist_id,
+                maxResults=50,
+                pageToken = next_page_token
+            )
+            playlistResponse = playlistRespone.execute()
+            with alive_bar(len(playlistResponse['items'])) as bar:  # progress bar for downloading video transcript and video info
+                for playlistItem in range(len(playlistResponse['items'])) and playlistResponse['items']:
+                    bar()
+                    video_id = playlistItem['snippet']['resourceId']['videoId']
+                    with open(channel_title+".txt", "a") as video_id_file:
+                        video_id_file.write(video_id+"\n")
+                    video_data = requestVideoData(video_id)
+                    json_video_data = jsonFormatter(video_data) # get video data and save it to a json file in the video_info folder
+                    caption = CaptionDownload(video_id)
+                    if(caption == None):
+                        log = open("log.txt", "a") 
+                        log.write(video_id+"\n")
+                    if 'nextPageToken' in playlistResponse.keys():
+                        next_page_token = playlistResponse['nextPageToken']
+                    else:
+                        next_page_token = None     
 
-response = request.execute()
-for item in response["items"]:
-    # print(item)
-    playlist_id = item["contentDetails"]["relatedPlaylists"]["uploads"] # get the playlist ID of the uploads playlist
-    next_page_token = '' # set the next page token to an empty string
-    while(next_page_token != None): # while there is a next page token to get get the next 50 videos
-        # print("Next Page Token: ", next_page_token)
-        playlistRespone = youtube.playlistItems().list(
-            part="snippet",
-            playlistId=playlist_id,
-            maxResults=50,
-            pageToken = next_page_token
-        )
-        playlistResponse = playlistRespone.execute()
-        with alive_bar(len(playlistResponse['items'])) as bar:  # progress bar for downloading video transcript and video info
-            for playlistItem in range(len(playlistResponse['items'])) and playlistResponse['items']:
-                bar()
-                video_id = playlistItem['snippet']['resourceId']['videoId']
-                video_data = requestVideoData(video_id)
-                json_video_data = jsonFormatter(video_data)
-                # convert jsonFormatter to CSV format
-                
-                caption = CaptionDownload(video_id)
-                if(caption == None):
-                    log = open("log.txt", "a") 
-                    log.write("Error: Unable to download transcript for video id: "+video_id+"\n")
-                if 'nextPageToken' in playlistResponse.keys():
-                    next_page_token = playlistResponse['nextPageToken']
-                else:
-                    next_page_token = None
-                time.sleep(0.001)
-                
-# next steps convert the json data to csv format with the correct schema
-
+download(channel_id)
