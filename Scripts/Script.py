@@ -26,7 +26,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print(f"File Name: {fileName}")
     print("---------------------------------------------------------")
-    outputfile = os.path.join(combineSP, f"{fileName}.mp4")
+    outputfile = os.path.join(combineSP, f"{fileName}")
     print("Output File: " + str(outputfile))
     
     # print(f"\nAudio File: {audiofile}") #DEBUG
@@ -40,7 +40,8 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("\nInput Audio: " + str(input_audio))
     print("---------------------------------------------------------")
 
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
+    # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile).run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -101,8 +102,8 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             print("\nBoth Download complete.")
             print("---------------------------------------------------------")
 
-            newAudioPath = Path(audioSP, f"{audioName}.mp4")
-            newVideoPath = Path(videoSP, f"{videoName}.mp4")
+            newAudioPath = Path(audioSP, f"{audioName}")
+            newVideoPath = Path(videoSP, f"{videoName}")
 
             combineFiles(newAudioPath, newVideoPath, combineSP, videoName) 
 
