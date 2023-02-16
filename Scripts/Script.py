@@ -54,7 +54,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Preparing Next Link...\n")
 
-def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks):   
+def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):   
     def downloadBoth(link):
         try:
             print(f"Downloading From: {link}") #DEBUG
@@ -115,7 +115,7 @@ def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks):
     for thread in threads:
         thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
 
-def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks):
+def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):
     for link in ytLinks: 
         try:
             link = str(link) #converts the list of links into a string for the function below
@@ -164,29 +164,66 @@ def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks):
             print('Error: Unable to download audio and video files:', e)
             return None
         
+def menu():
+    print("Welcome to the YouTube Downloader!")
+    print("This program will download the audio and video files from a YouTube video, and combine them into a single file.")
+    print("--------------------------------------------")
+    print("Please select an option for naming the downloaded files below:")
+    print("[1] By Original Name\n[2] By Video ID")
+
+    while True:
+        fileNameFormat = input("Enter your selection: ")
+        if fileNameFormat == "1":
+            print("Your files will be named by their original name.")
+            break
+        elif fileNameFormat == "2":
+            print("Your files will be named by their video ID.")
+            break
+        else:
+            print("Invalid input. Please try again.")
+            continue
+    
+    print("--------------------------------------------")
+    print("Please select an option for downloading the files below:")
+    print("[1] Single Thread\n[2] Multi Thread")
+
+    while True:
+        downloadFormat = input("Enter your selection: ")
+        if downloadFormat == "1":
+            print("Your files will be downloaded using a single thread.")
+            break
+        elif downloadFormat == "2":
+            print("Your files will be downloaded using multiple threads.")
+            break
+        else:
+            print("Invalid input. Please try again.")
+            continue
+    return fileNameFormat, downloadFormat
+
 # Main Function 
 if __name__ == '__main__':
 
     #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
-
     # audioSP = Path("Insert Path Here")
     # videoSP = Path("Insert Path Here")
     # combineSP = Path("Insert Path Here")
-
     audioSP = Path("Audios Folder")
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
     ytLinks = parseID("video_ids.txt")
 
-    # link = input("Enter your link: ")
-
-
     start = time.time()
-
-    multiThreadDownload(audioSP, videoSP, combineSP, ytLinks)
+    #--------------------------------------------
+    fileNameFormat, downloadFormat = menu()
+    if downloadFormat == "1":
+        singleThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat)
+    elif downloadFormat == "2":
+        multiThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat)
     # singleThreadDownload(audioSP, videoSP, combineSP, ytLinks)
+    # multiThreadDownload(audioSP, videoSP, combineSP, ytLinks)
 
+    #--------------------------------------------
     end = time.time()
 
     total_time = end - start
