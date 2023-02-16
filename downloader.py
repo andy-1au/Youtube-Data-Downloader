@@ -1,17 +1,13 @@
-from pytube import YouTube                  # for downloading videos
-from youtube_api import YouTubeDataAPI      # for getting youtube video data
-from pyyoutube import Api   # for getting youtube video data
-
+from youtube_api import YouTubeDataAPI                          # for getting youtube video data
 from youtube_transcript_api import YouTubeTranscriptApi         # for getting transcript
 from youtube_transcript_api.formatters import SRTFormatter      # for converting transcript to SRT format
+from alive_progress import alive_bar                            # for progress bar
 
-from alive_progress import alive_bar        # for progress bar
-import time                                 # for progress bar
-
-import os           # for saving files
-import googleapiclient.discovery # what is the googleapiclient.discovery module? https://developers.google.com/youtube/v3/docs/playlists/list
-import json                # for converting to json format
-import csv                 # for converting to csv format
+import os                           # for saving files
+import googleapiclient.discovery    # what is the googleapiclient.discovery module? https://developers.google.com/youtube/v3/docs/playlists/list
+import json                         # for converting to json format
+import threading                    # for multithreading
+import csv                          # for converting to csv format
 
 videoSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video" # Insert save path for videos here
 
@@ -21,7 +17,6 @@ transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downl
 
 video_infoPath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video_info" # Insert save path for video info here
 
-api = Api(api_key="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg")    # for getting youtube video data
 yt = YouTubeDataAPI("AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg")  # make the get request to youtube easier to use
 youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg") # this is for getting playlist data
 
@@ -70,10 +65,6 @@ def requestVideoData(video_id): # get video data from video ID using YouTubeData
         print("Error: Unable to get video data.")
     return response
 
-link = input("Enter the link to a youtube video: ") # get link from user
- 
-channel_id = getChannelID(link) # get channel ID from link
-
 def jsonFormatter(video_data):
     video_data = json.dumps(video_data, indent = 3, sort_keys=True) # convert to json format and sort by keys
     json_Data = json.loads(video_data).get("items")
@@ -115,14 +106,20 @@ def download(channel_id):
                     with open(channel_title+".txt", "a") as video_id_file:
                         video_id_file.write(video_id+"\n")
                     video_data = requestVideoData(video_id)
-                    json_video_data = jsonFormatter(video_data) # get video data and save it to a json file in the video_info folder
-                    caption = CaptionDownload(video_id)
-                    if(caption == None):
-                        log = open("log.txt", "a") 
-                        log.write(video_id+"\n")
+                    # threading.Thread(target=CaptionDownload, args=(video_id,)).start() # start a thread to download the transcript
+                    # threading.Thread(target=jsonFormatter, args=(video_data,)).start() # start a thread to download the video info
+                    # json_video_data = jsonFormatter(video_data) # get video data and save it to a json file in the video_info folder
+                    # caption = CaptionDownload(video_id)
+                    # if(caption == None):
+                    #     log = open("log.txt", "a") 
+                    #     log.write(video_id+"\n")
                     if 'nextPageToken' in playlistResponse.keys():
                         next_page_token = playlistResponse['nextPageToken']
                     else:
                         next_page_token = None     
+
+link = input("Enter the link to a youtube video: ") # get link from user
+ 
+channel_id = getChannelID(link) # get channel ID from link
 
 download(channel_id)
