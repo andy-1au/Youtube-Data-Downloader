@@ -9,12 +9,12 @@ removeAll:
 
 removeAudio:
 	cd Audios\ Folder/; \
-	rm -rf *.mp4
+	rm -rf *
 
 removeVideo:
 	cd Videos\ Folder/; \
-	rm -rf *.mp4
+	rm -rf *
 
 removeCombined:
 	cd Combine\ Folder/; \
-	rm -rf *.mp4
+	rm -rf *

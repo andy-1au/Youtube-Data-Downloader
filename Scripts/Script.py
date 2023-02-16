@@ -75,8 +75,9 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             else:
                 videoName = videoObject.title
                 videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
+                videoName = videoName + ".mp4"
                 print(f"Video Name: {videoName}") #DEBUG
-                videoObject.download(videoSP)
+                videoObject.download(videoSP, filename=videoName)
 
             print("Video Download Complete.")
             print("---------------------------------------------------------")
@@ -95,15 +96,16 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             else:
                 audioName = audioObject.title
                 audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
+                audioName = audioName + ".mp4"
                 print(f"Audio Name: {audioName}") #DEBUG
-                audioObject.download(audioSP)
+                audioObject.download(audioSP, filename=audioName)
 
             print("Audio Download Complete.")
             print("\nBoth Download complete.")
             print("---------------------------------------------------------")
-
             newAudioPath = Path(audioSP, f"{audioName}")
             newVideoPath = Path(videoSP, f"{videoName}")
+
 
             combineFiles(newAudioPath, newVideoPath, combineSP, videoName) 
 
@@ -123,11 +125,11 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
     for thread in threads:
         thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
 
-def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):
-    for link in ytLinks: 
+def singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
+    default_link = "https://www.youtube.com/watch?v="
+    for id in id_list: 
         try:
-            link = str(link) #converts the list of links into a string for the function below
-            link = link[2:-2] #removes first two and last two characters from the string, {} and ''
+            link = default_link + id
             print(f"Downloading From: {link}") #DEBUG
             print("---------------------------------------------------------")
 
@@ -138,13 +140,19 @@ def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):
             videoObject = videoObject.streams.filter(adaptive=True, file_extension='mp4').order_by('resolution').desc().first()
 
             print(f"Video Object: {videoObject}") #DEBUG
-            videoName = videoObject.title
-        
-            videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
-            print(f"Video Name: {videoName}") #DEBUG
-            # vtag = videoObject.itag #DEBUG
+            # vtag = videoObject.itag #vtag is the itag of the video stream
             # print(str(vtag) + " is the itag of the video stream.") #DEBUG
-            videoObject.download(videoSP)
+
+            if fileNameFormat == "2":
+                videoName = id
+                print(f"Video Name: {videoName}") #DEBUG
+                videoObject.download(videoSP, filename=videoName, format="mp4") 
+            else:
+                videoName = videoObject.title
+                videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
+                print(f"Video Name: {videoName}") #DEBUG
+                videoObject.download(videoSP)
+
             print("Video Download Complete.")
             print("---------------------------------------------------------")
 
@@ -152,19 +160,25 @@ def singleThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):
             audioObject = audioObject.streams.filter(only_audio=True).first()
 
             print(f"Audio Object: {audioObject}") #DEBUG
-            audioName = audioObject.title
-
-            audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
-            print(f"Audio Name: {audioName}") #DEBUG
-            # atag = audioObject.itag #DEBUG
+            # atag = audioObject.itag #atag is the itag of the audio stream
             # print(str(atag) + " is the itag of the audio stream.") #DEBUG
-            audioObject.download(audioSP)
+
+            if fileNameFormat == "2":
+                audioName = id
+                print(f"Audio Name: {audioName}") #DEBUG
+                audioObject.download(audioSP, filename=audioName, format="mp4")
+            else:
+                audioName = audioObject.title
+                audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
+                print(f"Audio Name: {audioName}") #DEBUG
+                audioObject.download(audioSP)
+
             print("Audio Download Complete.")
             print("\nBoth Download complete.")
             print("---------------------------------------------------------")
 
-            newAudioPath = Path(audioSP, f"{audioName}.mp4")
-            newVideoPath = Path(videoSP, f"{videoName}.mp4")
+            newAudioPath = Path(audioSP, f"{audioName}")
+            newVideoPath = Path(videoSP, f"{videoName}")
 
             combineFiles(newAudioPath, newVideoPath, combineSP, videoName) 
 
@@ -224,6 +238,7 @@ if __name__ == '__main__':
     #--------------------------------------------
     
     fileNameFormat, downloadFormat = menu()
+
     if downloadFormat == "1":
         singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat)
     elif downloadFormat == "2":
