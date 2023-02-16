@@ -15,13 +15,10 @@ import PySimpleGUI as sg
 #Next thing to do: change names of videos to the their respective IDs
 
 def parseID(file):
-    default_link = "https://www.youtube.com/watch?v="
     with open(file, 'r') as f: # 'with' closes the file for you
         id_list = [line.rstrip() for line in f] #removes the newline character from the end of each line
-        link_list = [{default_link + id} for id in id_list] # creates a list of links from the list of ids
     # print(f"IDs: {id_list}") #DEBUG
-    # print(f"Links: {link_list}") #DEBUG
-    return link_list 
+    return id_list
 
 def combineFiles(audioPath, videoPath, combineSP, fileName):
     
@@ -54,8 +51,8 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Preparing Next Link...\n")
 
-def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):   
-    def downloadBoth(link):
+def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):   
+    def downloadBoth(link, id):
         try:
             print(f"Downloading From: {link}") #DEBUG
             print("---------------------------------------------------------")
@@ -67,13 +64,17 @@ def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):
             videoObject = videoObject.streams.filter(adaptive=True, file_extension='mp4').order_by('resolution').desc().first()
 
             print(f"Video Object: {videoObject}") #DEBUG
-            videoName = videoObject.title
-        
-            videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
+            if fileNameFormat == "2":
+                videoName = id
+            else:
+                videoName = videoObject.title
+                videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
             print(f"Video Name: {videoName}") #DEBUG
-            # vtag = videoObject.itag #DEBUG
+            # vtag = videoObject.itag #vtag is the itag of the video stream
             # print(str(vtag) + " is the itag of the video stream.") #DEBUG
-            videoObject.download(videoSP)
+            videoName += ".mp4"
+            videoObject.download(videoSP, filename=videoName) 
+
             print("Video Download Complete.")
             print("---------------------------------------------------------")
 
@@ -81,13 +82,16 @@ def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):
             audioObject = audioObject.streams.filter(only_audio=True).first()
 
             print(f"Audio Object: {audioObject}") #DEBUG
-            audioName = audioObject.title
-
-            audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
+            if fileNameFormat == "2":
+                audioName = id
+            else:
+                audioName = audioObject.title
+                audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
             print(f"Audio Name: {audioName}") #DEBUG
-            # atag = audioObject.itag #DEBUG
+            # atag = audioObject.itag #atag is the itag of the audio stream
             # print(str(atag) + " is the itag of the audio stream.") #DEBUG
-            audioObject.download(audioSP)
+            audioName += ".mp4"
+            audioObject.download(audioSP, filename=audioName)
             print("Audio Download Complete.")
             print("\nBoth Download complete.")
             print("---------------------------------------------------------")
@@ -103,12 +107,11 @@ def multiThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat):
             exit()
 
     threads = [] #creates a list of threads
-    for link in ytLinks:
-        link = str(link) #converts the list of links into a string for the function below
-        link = link[2:-2] #removes first two and last two characters from the string, {} and ''
-        #creates a thread for each link, and passes the link as an argument
-        #comma is needed after the argument, even if there is only one argument because it is a tuple
-        thread = threading.Thread(target=downloadBoth, args=(link,)) 
+    default_link = "https://www.youtube.com/watch?v="
+    for id in id_list:
+        link = default_link + id
+        # print(f"Link: {link}") #DEBUG
+        thread = threading.Thread(target=downloadBoth, args=(link, id)) 
         threads.append(thread) #adds the thread to the list of threads
         thread.start() #starts the thread
     
@@ -202,7 +205,6 @@ def menu():
 
 # Main Function 
 if __name__ == '__main__':
-
     #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
     # audioSP = Path("Insert Path Here")
     # videoSP = Path("Insert Path Here")
@@ -211,17 +213,17 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    ytLinks = parseID("video_ids.txt")
+    id_list = parseID("video_ids.txt")
 
     start = time.time()
     #--------------------------------------------
+    
     fileNameFormat, downloadFormat = menu()
     if downloadFormat == "1":
-        singleThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat)
+        singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat)
     elif downloadFormat == "2":
-        multiThreadDownload(audioSP, videoSP, combineSP, ytLinks, fileNameFormat)
-    # singleThreadDownload(audioSP, videoSP, combineSP, ytLinks)
-    # multiThreadDownload(audioSP, videoSP, combineSP, ytLinks)
+        multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat)
+
 
     #--------------------------------------------
     end = time.time()
