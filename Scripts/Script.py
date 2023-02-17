@@ -232,7 +232,7 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    id_list = parseID("Lehigh University OFYE.txt")
+    id_list = parseID("1min.txt")
 
     start = time.time()
     #--------------------------------------------
