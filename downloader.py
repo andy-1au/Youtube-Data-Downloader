@@ -1,3 +1,4 @@
+from time import sleep
 from youtube_api import YouTubeDataAPI                          # for getting youtube video data
 from youtube_transcript_api import YouTubeTranscriptApi         # for getting transcript
 from youtube_transcript_api.formatters import SRTFormatter      # for converting transcript to SRT format
@@ -8,6 +9,7 @@ import googleapiclient.discovery    # what is the googleapiclient.discovery modu
 import json                         # for converting to json format
 import threading                    # for multithreading
 import csv                          # for converting to csv format
+import asyncio                      # for multithreading async
 
 videoSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video" # Insert save path for videos here
 
@@ -28,10 +30,9 @@ def getVideoID(link):
     return video_id
 
 
-def CaptionDownload(video_id):
+def CaptionDownload(video_id, video_title):
     try:
         srt = YouTubeTranscriptApi.get_transcript(video_id, languages=['en']) # get transcript english only
-        video_title = requestVideoData(video_id)["items"][0]["snippet"]["title"]
         #formatter to convert transcript to SRT format
         formatter = SRTFormatter()
         savePath = os.path.join(transcriptSavePath, video_title+"_id:"+video_id+".txt")
@@ -54,31 +55,30 @@ def requestChannelData(link): # get channel ID from video ID using YouTubeDataAP
     response = json.dumps(response, indent = 3, sort_keys=True) # convert to json format and sort by keys
     print(response)
 
-def requestVideoData(video_id): # get video data from video ID using YouTubeDataAPI V3
+async def requestVideoData(video_id): # get video data from video ID using YouTubeDataAPI V3 using async to speed up the process of getting video data
     try:
         request = youtube.videos().list(
             part="snippet,contentDetails,statistics",
             id=video_id
         )
         response = request.execute()
+        return response
     except:
         print("Error: Unable to get video data.")
-    return response
 
-def jsonFormatter(video_data):
+def jsonFormatter(video_data, video_title):
     video_data = json.dumps(video_data, indent = 3, sort_keys=True) # convert to json format and sort by keys
     json_Data = json.loads(video_data).get("items")
     if(json_Data == []): # if the video is private, it will return an empty list
         print(json_Data)
     else:
-        video_title = json_Data[0].get("snippet").get("title")
         if(video_title.find("/") != -1):
             video_title = video_title.replace("/", "-")
         savePath = os.path.join(video_infoPath, video_title+".json")
         with open(savePath, "w") as video_info:
             video_info.write(video_data)
 
-def download(channel_id):
+async def download(channel_id):
     request = youtube.channels().list( # get request the channel data using the channel ID to get the play ID of the uploads playlist
         part="snippet,contentDetails",
         id= channel_id
@@ -86,40 +86,50 @@ def download(channel_id):
     
     response = request.execute()
     channel_title = response["items"][0]["snippet"]["title"]
+    threads = [] # list of threads
     for item in response["items"]:
         # print(item)
         playlist_id = item["contentDetails"]["relatedPlaylists"]["uploads"] # get the playlist ID of the uploads playlist
         next_page_token = '' # set the next page token to an empty string
         while(next_page_token != None): # while there is a next page token to get get the next 50 videos
             # print("Next Page Token: ", next_page_token)
-            playlistRespone = youtube.playlistItems().list(
+            playlistResponse = youtube.playlistItems().list(
                 part="snippet",
                 playlistId=playlist_id,
                 maxResults=50,
                 pageToken = next_page_token
             )
-            playlistResponse = playlistRespone.execute()
+            playlistResponse = playlistResponse.execute()
             with alive_bar(len(playlistResponse['items'])) as bar:  # progress bar for downloading video transcript and video info
                 for playlistItem in range(len(playlistResponse['items'])) and playlistResponse['items']:
                     bar()
                     video_id = playlistItem['snippet']['resourceId']['videoId']
+                                     
                     with open(channel_title+".txt", "a") as video_id_file:
                         video_id_file.write(video_id+"\n")
-                    video_data = requestVideoData(video_id)
-                    # threading.Thread(target=CaptionDownload, args=(video_id,)).start() # start a thread to download the transcript
-                    # threading.Thread(target=jsonFormatter, args=(video_data,)).start() # start a thread to download the video info
-                    # json_video_data = jsonFormatter(video_data) # get video data and save it to a json file in the video_info folder
-                    # caption = CaptionDownload(video_id)
-                    # if(caption == None):
-                    #     log = open("log.txt", "a") 
-                    #     log.write(video_id+"\n")
+                        
+                    video_data = await requestVideoData(video_id) # start a thread to download the transcript
+                    video_title = video_data["items"][0]["snippet"]["title"]
+                    
+                    threadJson = threading.Thread(target=jsonFormatter, args=(video_data,video_title)) # start a thread to download the video info
+                    threadCaption = threading.Thread(target= CaptionDownload, args=(video_id,video_title)) # start a thread to download the transcript
+                    threads.append(threadCaption)
+                    threads.append(threadJson)
+                    threadCaption.start()
+                    threadJson.start()
+                    
                     if 'nextPageToken' in playlistResponse.keys():
                         next_page_token = playlistResponse['nextPageToken']
                     else:
-                        next_page_token = None     
+                        next_page_token = None
+                    
+    for thread in threads:
+        thread.join()
 
-link = input("Enter the link to a youtube video: ") # get link from user
- 
-channel_id = getChannelID(link) # get channel ID from link
-
-download(channel_id)
+async def main():
+    link = input("Enter the link to a youtube video: ") # get link from user
+    channel_id = getChannelID(link) # get channel ID from link
+    await download(channel_id)
+    
+    
+asyncio.run(main())
