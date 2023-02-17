@@ -3,8 +3,10 @@ W-UusnlOxRM
 NN-hWbgcILA
 7Rll0lspS6M
 
-NOTE: in the ffmpeg.output function, threads are applied 
+
+NOTE: ffmpeg -codecs outputs a list of codecs 
 NOTE: for multi-threading, I added my own threads (not sure if I will still use the thread parameter in output(), will be testing that)
+
 UPDATE: specifying threads in output function doesn't matter, ffmpeg defaults to the most optimal 
 UPDATE: h264_nvenc is slower by about 25%, but windows can play without extra applications
 
@@ -35,4 +37,9 @@ Multi-threading
     -----------------------
     No threads: 00:50 (h264_nvenc)
     No threads: 00:40 (hevc_nvenc)
-    
+
+Multi-threading
+    RTX 3080, Ryzen 7 5800H CPU
+    -----------------------
+    No threads: 00:28 (h264_nvenc)
+    No threads: 00:30 (hevc_nvenc)

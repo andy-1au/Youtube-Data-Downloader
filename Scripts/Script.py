@@ -12,8 +12,6 @@ from pytube.cli import on_progress  # for progress bar in terminal
 import ffmpeg
 import PySimpleGUI as sg
 
-#Next thing to do: change names of videos to the their respective IDs
-
 def parseID(file):
     with open(file, 'r') as f: # 'with' closes the file for you
         id_list = [line.rstrip() for line in f] #removes the newline character from the end of each line
@@ -41,7 +39,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
 
     # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile).run(overwrite_output=True)
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="hevc_nvenc").run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
