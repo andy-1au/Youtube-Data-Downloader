@@ -12,3 +12,6 @@ Makefile
 Video IDs
 Scripts/__pycache__
 test.py
+__pycache__
+front-end.pyt
+video_info
