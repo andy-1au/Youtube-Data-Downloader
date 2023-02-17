@@ -144,7 +144,7 @@ def singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             if fileNameFormat == "2":
                 videoName = id
                 print(f"Video Name: {videoName}") #DEBUG
-                videoObject.download(videoSP, filename=videoName, format="mp4") 
+                videoObject.download(videoSP, filename=videoName) 
             else:
                 videoName = videoObject.title
                 videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
@@ -164,7 +164,7 @@ def singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             if fileNameFormat == "2":
                 audioName = id
                 print(f"Audio Name: {audioName}") #DEBUG
-                audioObject.download(audioSP, filename=audioName, format="mp4")
+                audioObject.download(audioSP, filename=audioName)
             else:
                 audioName = audioObject.title
                 audioName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', audioName)
