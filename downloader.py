@@ -1,4 +1,3 @@
-from time import sleep
 from youtube_api import YouTubeDataAPI                          # for getting youtube video data
 from youtube_transcript_api import YouTubeTranscriptApi         # for getting transcript
 from youtube_transcript_api.formatters import SRTFormatter      # for converting transcript to SRT format
@@ -78,6 +77,10 @@ def jsonFormatter(video_data, video_title):
         with open(savePath, "w") as video_info:
             video_info.write(video_data)
 
+def csvFormatter(video_data, video_title):
+    video_data = csv.writer(open(video_title+".csv", "w"))
+    
+
 async def download(channel_id):
     request = youtube.channels().list( # get request the channel data using the channel ID to get the play ID of the uploads playlist
         part="snippet,contentDetails",
@@ -122,14 +125,8 @@ async def download(channel_id):
                         next_page_token = playlistResponse['nextPageToken']
                     else:
                         next_page_token = None
-                    
-    for thread in threads:
-        thread.join()
 
 async def main():
     link = input("Enter the link to a youtube video: ") # get link from user
     channel_id = getChannelID(link) # get channel ID from link
     await download(channel_id)
-    
-    
-asyncio.run(main())
