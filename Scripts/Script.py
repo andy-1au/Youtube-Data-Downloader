@@ -114,7 +114,7 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             print('Error: Unable to download audio and video files:', e)
             return None
 
-    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+    with ThreadPoolExecutor(max_workers=max_threads) as executor: #thread limiting function
         default_link = "https://www.youtube.com/watch?v="
         for id in id_list:
             link = default_link + id
