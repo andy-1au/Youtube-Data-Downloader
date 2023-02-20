@@ -1,10 +1,13 @@
 #Python Modules
 from pathlib import Path
-import os
-import re # for regex
-import threading # for multithreading
-import time
-from datetime import timedelta 
+import os # removals and paths
+import re # regex
+
+import threading # multithreading
+from concurrent.futures import ThreadPoolExecutor
+
+import time # time functions 
+from datetime import timedelta # time formatting 
 
 #Other Modules
 from pytube import YouTube
@@ -38,7 +41,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
 
     # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="hevc_nvenc").run(overwrite_output=True)
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -49,7 +52,9 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Preparing Next Link...\n")
 
-def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):   
+def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):  
+    max_threads = 3
+
     def downloadBoth(link, id):
         try:
             print(f"Downloading From: {link}") #DEBUG
@@ -103,24 +108,17 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             newAudioPath = Path(audioSP, f"{audioName}")
             newVideoPath = Path(videoSP, f"{videoName}")
 
-
             combineFiles(newAudioPath, newVideoPath, combineSP, videoName) 
 
         except Exception as e:
             print('Error: Unable to download audio and video files:', e)
             return None
 
-    threads = [] #creates a list of threads
-    default_link = "https://www.youtube.com/watch?v="
-    for id in id_list:
-        link = default_link + id
-        # print(f"Link: {link}") #DEBUG
-        thread = threading.Thread(target=downloadBoth, args=(link, id)) 
-        threads.append(thread) #adds the thread to the list of threads
-        thread.start() #starts the thread
-    
-    for thread in threads: #need this for the time function to work
-        thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+        default_link = "https://www.youtube.com/watch?v="
+        for id in id_list:
+            link = default_link + id
+            executor.submit(downloadBoth, link, id) #submit function with args to be executed in a separate thread`
 
 def singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
     default_link = "https://www.youtube.com/watch?v="
@@ -206,7 +204,7 @@ def menu():
     
     print("--------------------------------------------")
     print("Please select an option for downloading the files below:")
-    print("[1] Single Thread\n[2] Multi Thread")
+    print("[1] Single-threading\n[2] Multi-threading\n")
 
     while True:
         downloadFormat = input("Enter your selection: ")
@@ -231,7 +229,7 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    id_list = parseID("3min.txt") #input list of ids
+    id_list = parseID("test_IDs.txt") #input list of ids
 
     fileNameFormat, downloadFormat = menu() #calls menu function
 
