@@ -10,7 +10,6 @@ from datetime import timedelta
 from pytube import YouTube
 from pytube.cli import on_progress  # for progress bar in terminal
 import ffmpeg
-import PySimpleGUI as sg
 
 def parseID(file):
     with open(file, 'r') as f: # 'with' closes the file for you
@@ -39,7 +38,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
 
     # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile).run(overwrite_output=True)
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="hevc_nvenc").run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -120,8 +119,8 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
         threads.append(thread) #adds the thread to the list of threads
         thread.start() #starts the thread
     
-    # for thread in threads: #not sure if I need this
-    #     thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
+    for thread in threads: #need this for the time function to work
+        thread.join() #waits for all threads to finish before continuing, ensures that all downloads and combinations are complete before the program ends
 
 def singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
     default_link = "https://www.youtube.com/watch?v="
@@ -232,20 +231,18 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    id_list = parseID("1min.txt")
+    id_list = parseID("3min.txt") #input list of ids
 
-    start = time.time()
+    fileNameFormat, downloadFormat = menu() #calls menu function
+
     #--------------------------------------------
-    
-    fileNameFormat, downloadFormat = menu()
-
+    start = time.time()
     if downloadFormat == "1":
         singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat)
     elif downloadFormat == "2":
         multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat)
-
-    #--------------------------------------------
     end = time.time()
+    #--------------------------------------------
 
     total_time = end - start
     formatted_time = str(timedelta(seconds=total_time))
