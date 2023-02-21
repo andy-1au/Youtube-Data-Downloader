@@ -1,5 +1,5 @@
 run:
-	python Scripts/Script.py
+	python Scripts/Download.py
 
 gui: 
 	python Scripts/GUI.py
