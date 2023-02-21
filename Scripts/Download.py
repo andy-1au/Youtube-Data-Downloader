@@ -47,9 +47,9 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Deleting duplicate audio and video files...")
 
-    os.remove(audioPath) #deletes both audio and video files in their respective folders
+    # os.remove(audioPath) #deletes both audio and video files in their respective folders
     os.remove(videoPath) 
-    
+
     print("Deletion complete.")
     print("---------------------------------------------------------")
     print("Preparing Next Link...\n")
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    id_list = parseID("1min.txt") #input list of ids
+    id_list = parseID("insert txt file") #input list of ids
 
     fileNameFormat, downloadFormat = menu() #calls menu function
 
