@@ -41,7 +41,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
 
     # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile).run(overwrite_output=True)
+    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    id_list = parseID("insert txt file") #input list of ids
+    id_list = parseID("3min.txt") #input list of ids
 
     fileNameFormat, downloadFormat = menu() #calls menu function
 
