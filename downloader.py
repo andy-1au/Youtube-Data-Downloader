@@ -11,21 +11,17 @@ import threading                    # for multithreading
 import csv                          # for converting to csv format
 
 videoSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video" # Insert save path for videos here
-
 audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/audio" # Insert save path for audio here
-
 transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/transcript/" # Insert save path for transcript here
-
 video_infoPath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video_info" # Insert save path for video info here
 
-yt = YouTubeDataAPI("AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg")  # make the get request to youtube easier to use
-youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg") # this is for getting playlist data
+yt = YouTubeDataAPI("AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg")  # The YouTube Data API v3 service object to make requests to the API easier
+youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg") # The YouTube Data API v3 service object to make actual requests to the API
 
 def getVideoID(link):
     video_id = link.split("?v=")[1] # splits the link into a list and take the second element which is always the ID
     if(video_id.find("&") != -1): # if the video ID has a & in it it means there is a & with channel ID
         video_id = video_id.split("&")[0] # split the video ID by the & and take the first element which is always the video ID
-    print(video_id)
     return video_id
 
 
@@ -77,7 +73,6 @@ def csvFormatter(video_data, video_title, video_id):
 
     video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ") # convert date to datetime object to be able to format it 
     video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p") # format date to be more readable
-    print(video_publishedAt)
 
     csv_headers = ["channel_title", "video_id","video_title", "video_publishedAt", "video_thumbnail", "video_description"]
     csv_data = [channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description]
