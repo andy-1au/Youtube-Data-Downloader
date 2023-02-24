@@ -208,11 +208,10 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    idList = parseID("3min.txt") #input list of ids   
-
     fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
 
-    defaultLink = "https://www.youtube.com/watch?v="
+    idList = parseID("3min.txt") #input list of ids   
+    defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
     maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
 
     #--------------------------------------------
