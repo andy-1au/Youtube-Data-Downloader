@@ -41,7 +41,12 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
 
     # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
-    ffmpeg.concat(inputVideo, inputAudio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
+    if selectedCodec == "1":
+        ffmpeg.concat(inputVideo, inputAudio, v=1, a=1).output(outputfile).run(overwrite_output=True)
+    elif selectedCodec == "2":
+        ffmpeg.concat(inputVideo, inputAudio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
+    elif selectedCodec == "3": 
+        ffmpeg.concat(inputVideo, inputAudio, v=1, a=1).output(outputfile, vcodec="hevc_nvenc").run(overwrite_output=True) 
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -49,6 +54,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
 
     # os.remove(audioPath) #deletes both audio and video files in their respective folders
     os.remove(videoPath) 
+    os.remove(audioPath)
 
     print("Deletion complete.")
     print("---------------------------------------------------------")
@@ -114,7 +120,7 @@ def downloadBoth(link, id):
         return None
 
 def multiThreadDownload(idList):  
-    maxThreads = 3 #set number of threads here, 3 seems to be working fine with rtx 3060
+    maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
 
     with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
         defaultLink = "https://www.youtube.com/watch?v="
@@ -129,21 +135,22 @@ def singleThreadDownload(idList):
         link = defaultLink + id
         downloadBoth(link, id)
         
-        
 def menu():
-    print("Welcome to the YouTube Downloader!")
-    print("This program will download the audio and video files from a YouTube video, and combine them into a single file.")
+    print("\nWelcome to the YouTube Downloader!")
+    print("This program will download the audio and video files from a YouTube link and combine them into a single file!")
     print("--------------------------------------------")
     print("Please select an option for naming the downloaded files below:")
-    print("[1] By Original Name\n[2] By Video ID")
+    print("[1] By Original Name\n[2] By Video ID\n")
 
     while True:
-        fileNameFormat = input("Enter your selection: ")
-        if fileNameFormat == "1":
-            print("Your files will be named by their original name.")
+        fileNameFormat = input("Enter your selection (or Q to quit): ")
+        if fileNameFormat.lower() == "q":
+            exit()
+        elif fileNameFormat == "1":
+            print("\nYour files will be named by their original name.")
             break
         elif fileNameFormat == "2":
-            print("Your files will be named by their video ID.")
+            print("\nYour files will be named by their video ID.")
             break
         else:
             print("Invalid input. Please try again.")
@@ -154,19 +161,50 @@ def menu():
     print("[1] Single-threading\n[2] Multi-threading\n")
 
     while True:
-        downloadFormat = input("Enter your selection: ")
-        if downloadFormat == "1":
-            print("Your files will be downloaded using a single thread.")
+        downloadFormat = input("Enter your selection (or Q to quit): ")
+        if downloadFormat.lower() == "q":
+            exit()
+        elif downloadFormat == "1":
+            print("\nYour files will be downloaded using a single thread.")
             break
         elif downloadFormat == "2":
-            print("Your files will be downloaded using multiple threads.")
+            while True:
+                numThreads = input("Enter the number of threads you want to use (2-4) (or Q to quit): ")
+                if numThreads.lower() == "q":
+                    exit()
+                if numThreads.isdigit() and int(numThreads) in range(2, 5):
+                    print(f"\nYour files will be downloaded using {numThreads} threads.")
+                    break
+                else:
+                    print("Invalid input. Please enter a number between 2 and 4.")
             break
         else:
             print("Invalid input. Please try again.")
             continue
-    return fileNameFormat, downloadFormat
 
-# Main Function 
+    print("--------------------------------------------")
+    print("Please select an video codec for encoding:")
+    print("[1] Default Codec (CPU)\n[2] NVIDIA Default Codec (h264_nvenc)\n[3] NVIDIA Experimental Codec (hevc_nvenc)\n")
+
+    while True: 
+        selectedCodec = input("Enter your selection (or Q to quit): ")
+        if selectedCodec.lower() == "q":
+            exit()
+        elif selectedCodec == "1":
+            print("The default codec will be used for encoding.")
+            break
+        elif selectedCodec == "2":
+            print("The NVIDIA default codec (h264_nvenc) will be used for encoding.")
+            break
+        elif selectedCodec == "3":
+            print("The NVIDIA experimental codec (hevc_nvenc) will be used for encoding.")
+            break
+        else:
+            print("Invalid input. Please try again.")
+            continue
+
+    return fileNameFormat, downloadFormat, selectedCodec, numThreads
+
 if __name__ == '__main__':
     #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
     # audioSP = Path("Insert Path Here")
@@ -176,9 +214,9 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    idList = parseID("3min.txt") #input list of ids
+    idList = parseID("3min.txt") #input list of ids   
 
-    fileNameFormat, downloadFormat = menu() #calls menu function
+    fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
 
     #--------------------------------------------
     start = time.time()
