@@ -16,9 +16,9 @@ import ffmpeg
 
 def parseID(file):
     with open(file, 'r') as f: # 'with' closes the file for you
-        id_list = [line.rstrip() for line in f] #removes the newline character from the end of each line
-    # print(f"IDs: {id_list}") #DEBUG
-    return id_list
+        idList = [line.rstrip() for line in f] #removes the newline character from the end of each line
+    # print(f"IDs: {idList}") #DEBUG
+    return idList
 
 def combineFiles(audioPath, videoPath, combineSP, fileName):
     
@@ -33,15 +33,15 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     # print (f"Video File: {videofile}") #DEBUG
     # print(f"Output File: {outputfile}") #DEBUG
 
-    input_video = ffmpeg.input(videoPath)
-    input_audio = ffmpeg.input(audioPath)
+    inputVideo = ffmpeg.input(videoPath)
+    inputAudio = ffmpeg.input(audioPath)
     print("---------------------------------------------------------")
-    print("Input Video: " + str(input_video))
-    print("\nInput Audio: " + str(input_audio))
+    print("Input Video: " + str(inputVideo))
+    print("\nInput Audio: " + str(inputAudio))
     print("---------------------------------------------------------")
 
     # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
-    ffmpeg.concat(input_video, input_audio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
+    ffmpeg.concat(inputVideo, inputAudio, v=1, a=1).output(outputfile, vcodec="h264_nvenc").run(overwrite_output=True)
 
     print("\nCombining complete.")
     print("---------------------------------------------------------")
@@ -54,8 +54,8 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Preparing Next Link...\n")
 
-def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):  
-    max_threads = 3
+def multiThreadDownload(audioSP, videoSP, combineSP, idList, fileNameFormat):  
+    maxThreads = 3
 
     def downloadBoth(link, id):
         try:
@@ -116,17 +116,17 @@ def multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
             print('Error: Unable to download audio and video files:', e)
             return None
 
-    with ThreadPoolExecutor(max_workers=max_threads) as executor: #thread limiting function
-        default_link = "https://www.youtube.com/watch?v="
-        for id in id_list:
-            link = default_link + id
+    with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
+        defaultLink = "https://www.youtube.com/watch?v="
+        for id in idList:
+            link = defaultLink + id
             executor.submit(downloadBoth, link, id) #submit function with args to be executed in a separate thread`
 
-def singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat):
-    default_link = "https://www.youtube.com/watch?v="
-    for id in id_list: 
+def singleThreadDownload(audioSP, videoSP, combineSP, idList, fileNameFormat):
+    defaultLink = "https://www.youtube.com/watch?v="
+    for id in idList: 
         try:
-            link = default_link + id
+            link = defaultLink + id
             print(f"Downloading From: {link}") #DEBUG
             print("---------------------------------------------------------")
 
@@ -231,19 +231,19 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    id_list = parseID("3min.txt") #input list of ids
+    idList = parseID("3min.txt") #input list of ids
 
     fileNameFormat, downloadFormat = menu() #calls menu function
 
     #--------------------------------------------
     start = time.time()
     if downloadFormat == "1":
-        singleThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat)
+        singleThreadDownload(audioSP, videoSP, combineSP, idList, fileNameFormat)
     elif downloadFormat == "2":
-        multiThreadDownload(audioSP, videoSP, combineSP, id_list, fileNameFormat)
+        multiThreadDownload(audioSP, videoSP, combineSP, idList, fileNameFormat)
     end = time.time()
     #--------------------------------------------
 
-    total_time = end - start
-    formatted_time = str(timedelta(seconds=total_time))
-    print(f"\nTotal Time: {formatted_time}")
+    totalTime = end - start
+    formattedTime = str(timedelta(seconds=totalTime))
+    print(f"\nTotal Time: {formattedTime}")
