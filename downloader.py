@@ -18,39 +18,63 @@ video_infoPath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloade
 yt = YouTubeDataAPI("AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg")  # The YouTube Data API v3 service object to make requests to the API easier
 youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg") # The YouTube Data API v3 service object to make actual requests to the API
 
+
 def getVideoID(link):
-    video_id = link.split("?v=")[1] # splits the link into a list and take the second element which is always the ID
-    if(video_id.find("&") != -1): # if the video ID has a & in it it means there is a & with channel ID
-        video_id = video_id.split("&")[0] # split the video ID by the & and take the first element which is always the video ID
+    '''
+    Get the video ID from the link
+    :param link: (str)
+    :return: video_id (str)
+    '''
+    video_id = link.split("?v=")[1] 
+    if(video_id.find("&") != -1): 
+        video_id = video_id.split("&")[0]
     return video_id
 
-
 def CaptionDownload(video_id, video_title):
+    '''
+    Download the transcript of the video and save it as a .txt file in SRT Format
+    :param video_id: (str)
+    :param video_title: (str)
+    :return: None
+    '''
     try:
         srt = YouTubeTranscriptApi.get_transcript(video_id, languages=['en']) # get transcript english only
-        #formatter to convert transcript to SRT format
-        formatter = SRTFormatter()
+        formatter = SRTFormatter() # format transcript to SRT format
         savePath = os.path.join(transcriptSavePath, video_title+"_id:"+video_id+".txt")
         with open(savePath, "w") as srt_file:
             srt_file.write(formatter.format_transcript(srt))
     except:
         return None
 
-def getChannelID(link): # get channel ID from video ID using YouTubeDataAPI
+def getChannelID(link):
+    '''
+    Get the channel ID from a link
+    :param link: (str)
+    :return: channel_id (str)
+    '''
     video_id = getVideoID(link)
     channel_id = yt.get_video_metadata(video_id=video_id)['channel_id']
     return channel_id
 
 def requestChannelData(link): # get channel ID from video ID using YouTubeDataAPI V3
+    '''
+    Send a GET request to the API to get the channel data using the channel ID
+    :param link: (str)
+    :return: None
+    '''
     request = youtube.channels().list(
         part = "snippet,contentDetails",
         id = getChannelID(link), # get channel ID from video ID
     )
     response = request.execute()
     response = json.dumps(response, indent = 3, sort_keys=True) # convert to json format and sort by keys
-    print(response)
 
-async def requestVideoData(video_id): # get video data from video ID using YouTubeDataAPI V3 using async to speed up the process of getting video data
+async def requestVideoData(video_id): 
+    '''
+    (async) Send a GET request to the API to get the video data using the video ID
+    :param video_id: (str)
+    :return: response (dict)
+    '''
     try:
         request = youtube.videos().list(
             part="snippet,contentDetails,statistics",
@@ -62,6 +86,13 @@ async def requestVideoData(video_id): # get video data from video ID using YouTu
         print("Error: Unable to get video data.")
 
 def csvFormatter(video_data, video_title, video_id):
+    '''
+    Format the video data to be saved in a csv file and save it in a folder
+    :param video_data: (dict)
+    :param video_title: (str)
+    :param video_id: (str)
+    :return: None
+    '''
     data = video_data.get("items")[0]["snippet"]
     channel_title = data.get("channelTitle")
     video_publishedAt = data.get("publishedAt")
@@ -71,8 +102,8 @@ def csvFormatter(video_data, video_title, video_id):
     if(video_description == ""):
         video_description = "No Description"
 
-    video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ") # convert date to datetime object to be able to format it 
-    video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p") # format date to be more readable
+    video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ")
+    video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p")
 
     csv_headers = ["channel_title", "video_id","video_title", "video_publishedAt", "video_thumbnail", "video_description"]
     csv_data = [channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description]
@@ -86,20 +117,23 @@ def csvFormatter(video_data, video_title, video_id):
             writer.writerow(csv_data)
 
 async def download(channel_id):
-    request = youtube.channels().list( # get request the channel data using the channel ID to get the play ID of the uploads playlist
+    '''
+    (async) Download the video, transcript, and video info of the video. Send a GET request to the API to get the video data using the video ID and save it in a csv file in a folder
+    :param channel_id: (str)
+    :return: None
+    '''
+    request = youtube.channels().list(
         part="snippet,contentDetails",
         id= channel_id
     )
     
     response = request.execute()
     channel_title = response["items"][0]["snippet"]["title"]
-    threads = [] # list of threads
+    threads = [] # list of threads to run the async functions
     for item in response["items"]:
-        # print(item)
         playlist_id = item["contentDetails"]["relatedPlaylists"]["uploads"] # get the playlist ID of the uploads playlist
         next_page_token = '' # set the next page token to an empty string
         while(next_page_token != None): # while there is a next page token to get get the next 50 videos
-            # print("Next Page Token: ", next_page_token)
             playlistResponse = youtube.playlistItems().list(
                 part="snippet",
                 playlistId=playlist_id,
@@ -131,7 +165,6 @@ async def download(channel_id):
                         next_page_token = None
 
 async def main():
-    link = input("Enter the link to a youtube video: ") # get link from user
+    link = input("Enter the link to a youtube video: ")
     channel_id = getChannelID(link) # get channel ID from link
-    await download(channel_id) # start downloading the videos
-
+    await download(channel_id)# start downloading the videos, transcripts, and video info of the channel
