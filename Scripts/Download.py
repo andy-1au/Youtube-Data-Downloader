@@ -191,16 +191,16 @@ def menu():
         if selectedCodec.lower() == "q":
             exit()
         elif selectedCodec == "1":
-            print("The default codec will be used for encoding.")
+            print("\nThe default codec will be used for encoding.")
             break
         elif selectedCodec == "2":
-            print("The NVIDIA default codec (h264_nvenc) will be used for encoding.")
+            print("\nThe NVIDIA default codec (h264_nvenc) will be used for encoding.")
             break
         elif selectedCodec == "3":
-            print("The NVIDIA experimental codec (hevc_nvenc) will be used for encoding.")
+            print("\nThe NVIDIA experimental codec (hevc_nvenc) will be used for encoding.")
             break
         else:
-            print("Invalid input. Please try again.")
+            print("\nInvalid input. Please try again.")
             continue
 
     return fileNameFormat, downloadFormat, selectedCodec, numThreads
