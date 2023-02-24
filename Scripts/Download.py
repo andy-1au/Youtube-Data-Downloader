@@ -113,7 +113,7 @@ def downloadBoth(link, id):
         print('Error: Unable to download audio and video files:', e)
         return None
 
-def multiThreadDownload(audioSP, videoSP, combineSP, idList, fileNameFormat):  
+def multiThreadDownload(idList):  
     maxThreads = 3 #set number of threads here, 3 seems to be working fine with rtx 3060
 
     with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
@@ -185,7 +185,7 @@ if __name__ == '__main__':
     if downloadFormat == "1":
         singleThreadDownload(idList)
     elif downloadFormat == "2":
-        multiThreadDownload(audioSP, videoSP, combineSP, idList, fileNameFormat)
+        multiThreadDownload(idList)
     end = time.time()
     #--------------------------------------------
 
