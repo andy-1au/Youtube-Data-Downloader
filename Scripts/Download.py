@@ -2,9 +2,8 @@
 from pathlib import Path
 import os # removals and paths
 import re # regex
-
-import threading # multithreading
-from concurrent.futures import ThreadPoolExecutor
+ 
+from concurrent.futures import ThreadPoolExecutor # multithreading
 
 import time # time functions 
 from datetime import timedelta # time formatting 
