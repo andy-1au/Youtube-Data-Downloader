@@ -1,3 +1,4 @@
+from datetime import datetime # for converting date
 from youtube_api import YouTubeDataAPI                          # for getting youtube video data
 from youtube_transcript_api import YouTubeTranscriptApi         # for getting transcript
 from youtube_transcript_api.formatters import SRTFormatter      # for converting transcript to SRT format
@@ -8,7 +9,6 @@ import googleapiclient.discovery    # what is the googleapiclient.discovery modu
 import json                         # for converting to json format
 import threading                    # for multithreading
 import csv                          # for converting to csv format
-import asyncio                      # for multithreading async
 
 videoSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video" # Insert save path for videos here
 
@@ -65,21 +65,30 @@ async def requestVideoData(video_id): # get video data from video ID using YouTu
     except:
         print("Error: Unable to get video data.")
 
-def jsonFormatter(video_data, video_title):
-    video_data = json.dumps(video_data, indent = 3, sort_keys=True) # convert to json format and sort by keys
-    json_Data = json.loads(video_data).get("items")
-    if(json_Data == []): # if the video is private, it will return an empty list
-        print(json_Data)
-    else:
-        if(video_title.find("/") != -1):
-            video_title = video_title.replace("/", "-")
-        savePath = os.path.join(video_infoPath, video_title+".json")
-        with open(savePath, "w") as video_info:
-            video_info.write(video_data)
-
-def csvFormatter(video_data, video_title):
-    video_data = csv.writer(open(video_title+".csv", "w"))
+def csvFormatter(video_data, video_title, video_id):
+    data = video_data.get("items")[0]["snippet"]
+    channel_title = data.get("channelTitle")
+    video_publishedAt = data.get("publishedAt")
+    video_thumbnail = data.get("thumbnails").get("high").get("url")
+    video_description = data.get("description")
     
+    if(video_description == ""):
+        video_description = "No Description"
+
+    video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ") # convert date to datetime object to be able to format it 
+    video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p") # format date to be more readable
+    print(video_publishedAt)
+
+    csv_headers = ["channel_title", "video_id","video_title", "video_publishedAt", "video_thumbnail", "video_description"]
+    csv_data = [channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description]
+    if(video_title.find("/") != -1):
+        video_title = video_title.replace("/", "-")
+    else:
+        savePath = os.path.join(video_infoPath, video_title+".csv")
+        with open(savePath, "w", encoding="utf-16", newline='') as video_info:
+            writer = csv.writer(video_info, delimiter="\t")
+            writer.writerow(csv_headers)
+            writer.writerow(csv_data)
 
 async def download(channel_id):
     request = youtube.channels().list( # get request the channel data using the channel ID to get the play ID of the uploads playlist
@@ -114,7 +123,7 @@ async def download(channel_id):
                     video_data = await requestVideoData(video_id) # start a thread to download the transcript
                     video_title = video_data["items"][0]["snippet"]["title"]
                     
-                    threadJson = threading.Thread(target=jsonFormatter, args=(video_data,video_title)) # start a thread to download the video info
+                    threadJson = threading.Thread(target=csvFormatter, args=(video_data,video_title, video_id)) # start a thread to download the video info
                     threadCaption = threading.Thread(target= CaptionDownload, args=(video_id,video_title)) # start a thread to download the transcript
                     threads.append(threadCaption)
                     threads.append(threadJson)
@@ -129,4 +138,5 @@ async def download(channel_id):
 async def main():
     link = input("Enter the link to a youtube video: ") # get link from user
     channel_id = getChannelID(link) # get channel ID from link
-    await download(channel_id)
+    await download(channel_id) # start downloading the videos
+
