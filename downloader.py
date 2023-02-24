@@ -44,7 +44,7 @@ def getChannelID(link): # get channel ID from video ID using YouTubeDataAPI
 def requestChannelData(link): # get channel ID from video ID using YouTubeDataAPI V3
     request = youtube.channels().list(
         part = "snippet,contentDetails",
-        id = getChannelID(link),
+        id = getChannelID(link), # get channel ID from video ID
     )
     response = request.execute()
     response = json.dumps(response, indent = 3, sort_keys=True) # convert to json format and sort by keys
