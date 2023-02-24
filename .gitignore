@@ -4,14 +4,18 @@ Combine Test Folder
 Audios Folder
 Videos Folder
 Combine Folder
+Subtitles Folder
+
 transcript
 audio
 video
 *.txt
 Makefile
+
 Video IDs
 Scripts/__pycache__
 test.py
 __pycache__
+
 front-end.pyt
 video_info
