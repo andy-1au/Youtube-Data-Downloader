@@ -166,6 +166,7 @@ def menu():
             exit()
         elif downloadFormat == "1":
             print("\nYour files will be downloaded using a single thread.")
+            numThreads = 0
             break
         elif downloadFormat == "2":
             while True:
@@ -214,7 +215,7 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    idList = parseID("3min.txt") #input list of ids   
+    idList = parseID("Lehigh_University_OFYE.txt") #input list of ids   
 
     fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
 
