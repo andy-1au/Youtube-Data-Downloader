@@ -2,9 +2,8 @@
 from pathlib import Path
 import os # removals and paths
 import re # regex
-
-import threading # multithreading
-from concurrent.futures import ThreadPoolExecutor
+ 
+from concurrent.futures import ThreadPoolExecutor # multithreading
 
 import time # time functions 
 from datetime import timedelta # time formatting 
@@ -40,7 +39,6 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("\nInput Audio: " + str(inputAudio))
     print("---------------------------------------------------------")
 
-    # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
     if selectedCodec == "1":
         ffmpeg.concat(inputVideo, inputAudio, v=1, a=1).output(outputfile).run(overwrite_output=True)
     elif selectedCodec == "2":
@@ -52,7 +50,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Deleting duplicate audio and video files...")
 
-    # os.remove(audioPath) #deletes both audio and video files in their respective folders
+    #deletes both audio and video files in their respective folders
     os.remove(videoPath) 
     os.remove(audioPath)
 
@@ -120,17 +118,12 @@ def downloadBoth(link, id):
         return None
 
 def multiThreadDownload(idList):  
-    maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
-
     with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
-        defaultLink = "https://www.youtube.com/watch?v="
         for id in idList:
             link = defaultLink + id
             executor.submit(downloadBoth, link, id) #submit function with args to be executed in a separate thread`
 
 def singleThreadDownload(idList):
-    defaultLink = "https://www.youtube.com/watch?v="
-
     for id in idList: 
         link = defaultLink + id
         downloadBoth(link, id)
@@ -218,6 +211,10 @@ if __name__ == '__main__':
     idList = parseID("Lehigh_University_OFYE.txt") #input list of ids   
 
     fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
+
+    idList = parseID("3min.txt") #input list of ids   
+    defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
+    maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
 
     #--------------------------------------------
     start = time.time()
