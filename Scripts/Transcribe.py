@@ -9,6 +9,7 @@ import Download as dl   # Download.py
 model = whisper.load_model("base") # load OpenAI's model
 
 # options = whisper.DecodingOptions(language='en', fp16=False)
+# To do: given the list of ids, just download the audio files and loop through each audio file and output the transcript in txt with their {id}.txt to some folder 
 
 result = model.transcribe("Audios Folder\W-UusnlOxRM.mp4") 
 lines = result['text'] # get the text

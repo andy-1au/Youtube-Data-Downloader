@@ -4,17 +4,25 @@ run:
 gui: 
 	python Scripts/GUI.py
 
-removeAll:
+check: 
+	python Scripts/Check.py
+
+newFolder:
+	mkdir "$(name)" && \
+	cd "$(name)" && \
+	mkdir Transcripts Videos Metadata
+
+clean:
 	make removeAudio && make removeVideo && make removeCombined
 
-removeAudio:
+cleanAudio:
 	cd Audios\ Folder/; \
 	rm -rf -- * 
 
-removeVideo:
+cleanVideo:
 	cd Videos\ Folder/; \
 	rm -rf -- *
 
-removeCombined:
+cleanCombined:
 	cd Combine\ Folder/; \
 	rm -rf -- *

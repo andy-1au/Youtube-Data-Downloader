@@ -208,12 +208,13 @@ if __name__ == '__main__':
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     
-    idList = parseID("Lehigh_University_OFYE.txt") #input list of ids   
-
     fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
-  
-    defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
+
     maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
+    
+    defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
+    textFile = "Lehigh_University_College_of_Arts_and_Sciences.txt" #insert name of the .txt file containing the video ids
+    idList = parseID("ID Folder/" + textFile) #input list of ids   
 
     #--------------------------------------------
     start = time.time()
@@ -226,4 +227,8 @@ if __name__ == '__main__':
 
     totalTime = end - start
     formattedTime = str(timedelta(seconds=totalTime))
+
+    print("\nAll files have been downloaded and combined!")
     print(f"\nTotal Time: {formattedTime}")
+
+
