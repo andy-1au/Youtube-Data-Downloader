@@ -1,6 +1,7 @@
 #Python Modules
 from pathlib import Path
 import os # removals and paths
+import sys # system functions
 import re # regex
  
 from concurrent.futures import ThreadPoolExecutor # multithreading
@@ -128,10 +129,35 @@ def singleThreadDownload(idList):
         link = defaultLink + id
         downloadBoth(link, id)
         
-def menu():
+def menu(directory):
     print("\nWelcome to the YouTube Downloader!")
     print("This program will download the audio and video files from a YouTube link and combine them into a single file!")
     print("--------------------------------------------")
+    
+    # Get a list of all text files in the directory
+    files = [f for f in os.listdir(directory) if f.endswith('.txt')]
+
+    # Display the list of files to the user
+    print(f"Please select a file from the following list:")
+    while True:
+        try: 
+            for i, file in enumerate(files):
+                #print in [] where the number is in the []
+                print(f"[{i+1}] {file}")
+            choice = input("Enter a number (or Q to quit): ")
+            if choice.lower() == "q":
+                exit()
+            elif int(choice) in range(1, len(files)+1): # Check if the user's input is a valid number
+                fileName = files[int(choice)-1]
+                print(f"You selected {fileName}.")
+                break
+            else:
+                print("Invalid input. Please try again.")
+                continue
+        except ValueError:
+            print("Invalid input. Please try again.")
+            continue
+    
     print("Please select an option for naming the downloaded files below:")
     print("[1] By Original Name\n[2] By Video ID\n")
 
@@ -197,7 +223,7 @@ def menu():
             print("\nInvalid input. Please try again.")
             continue
 
-    return fileNameFormat, downloadFormat, selectedCodec, numThreads
+    return fileNameFormat, downloadFormat, selectedCodec, numThreads, fileName
 
 if __name__ == '__main__':
     #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
@@ -207,15 +233,14 @@ if __name__ == '__main__':
     audioSP = Path("Audios Folder")
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
+    idSP = Path("ID Folder")
     
-    fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
+    fileNameFormat, downloadFormat, selectedCodec, numThreads, fileName = menu(idSP) #calls menu function
 
+    defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
+    idList = parseID("ID Folder/" + fileName)  
     maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
     
-    defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
-    textFile = "Lehigh_University_College_of_Arts_and_Sciences.txt" #insert name of the .txt file containing the video ids
-    idList = parseID("ID Folder/" + textFile) #input list of ids   
-
     #--------------------------------------------
     start = time.time()
     if downloadFormat == "1":

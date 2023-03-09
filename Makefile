@@ -14,7 +14,7 @@ newFolder:
 	mkdir Transcripts Videos Metadata
 
 clean:
-	make removeAudio && make removeVideo && make removeCombined
+	make cleanAudio && make cleanVideo && make cleanCombined
 
 cleanAudio:
 	cd Audios\ Folder/; \
