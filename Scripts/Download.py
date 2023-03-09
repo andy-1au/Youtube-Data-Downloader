@@ -211,8 +211,7 @@ if __name__ == '__main__':
     idList = parseID("Lehigh_University_OFYE.txt") #input list of ids   
 
     fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
-
-    idList = parseID("3min.txt") #input list of ids   
+  
     defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
     maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
 
