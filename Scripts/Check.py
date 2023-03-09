@@ -1,13 +1,5 @@
 import os 
 
-# folder path 
-videoRootFolder = "Lehigh OFYE"
-folderPath = videoRootFolder + "/Videos"
-
-# txt file path 
-txtFile = "Lehigh_University_OFYE.txt"
-txtFilePath = "ID Folder/" + txtFile
-
 def compare(folderPath, txtFilePath):
     # read the video names from the txt file
     with open(txtFilePath, 'r') as f:
@@ -28,3 +20,15 @@ def compare(folderPath, txtFilePath):
         for id in videoIDs:
             if id not in videoFolderNames:
                 print(id)
+
+if __name__ == '__main__':
+
+    # folder path 
+    videoRootFolder = "Lehigh CAS"
+    folderPath = videoRootFolder + "/Videos"
+
+    # txt file path 
+    txtFile = "Lehigh_University_College_of_Arts_and_Sciences.txt"
+    txtFilePath = "ID Folder/" + txtFile
+
+    compare(folderPath, txtFilePath)
