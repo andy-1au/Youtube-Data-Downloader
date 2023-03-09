@@ -139,7 +139,7 @@ def menu(directory):
     print(f"Please select a file from the following list:") #
     while True:
         try: 
-            for i, file in enumerate(files):
+            for i, file in enumerate(files): #enumerate() returns the index and the value of the list
                 print(f"[{i+1}] {file}") #  Display the list of files to the user, +1 for the user's convenience
             choice = input("Enter a number (or Q to quit): ")
             if choice.lower() == "q":
