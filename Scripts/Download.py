@@ -1,10 +1,10 @@
 #Python Modules
 from pathlib import Path
 import os # removals and paths
+import sys # system functions
 import re # regex
-
-import threading # multithreading
-from concurrent.futures import ThreadPoolExecutor
+ 
+from concurrent.futures import ThreadPoolExecutor # multithreading
 
 import time # time functions 
 from datetime import timedelta # time formatting 
@@ -40,7 +40,6 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("\nInput Audio: " + str(inputAudio))
     print("---------------------------------------------------------")
 
-    # vcodec="h264_nvenc" #for nvidia gpu, add this as a parameter to the output function
     if selectedCodec == "1":
         ffmpeg.concat(inputVideo, inputAudio, v=1, a=1).output(outputfile).run(overwrite_output=True)
     elif selectedCodec == "2":
@@ -52,7 +51,7 @@ def combineFiles(audioPath, videoPath, combineSP, fileName):
     print("---------------------------------------------------------")
     print("Deleting duplicate audio and video files...")
 
-    # os.remove(audioPath) #deletes both audio and video files in their respective folders
+    #deletes both audio and video files in their respective folders
     os.remove(videoPath) 
     os.remove(audioPath)
 
@@ -120,25 +119,42 @@ def downloadBoth(link, id):
         return None
 
 def multiThreadDownload(idList):  
-    maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
-
     with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
-        defaultLink = "https://www.youtube.com/watch?v="
         for id in idList:
             link = defaultLink + id
             executor.submit(downloadBoth, link, id) #submit function with args to be executed in a separate thread`
 
 def singleThreadDownload(idList):
-    defaultLink = "https://www.youtube.com/watch?v="
-
     for id in idList: 
         link = defaultLink + id
         downloadBoth(link, id)
         
-def menu():
+def menu(directory):
     print("\nWelcome to the YouTube Downloader!")
     print("This program will download the audio and video files from a YouTube link and combine them into a single file!")
     print("--------------------------------------------")
+    
+    files = [f for f in os.listdir(directory) if f.endswith('.txt')] # Get a list of all text files in the directory
+
+    print(f"Please select a file from the following list:") #
+    while True:
+        try: 
+            for i, file in enumerate(files):
+                print(f"[{i+1}] {file}") #  Display the list of files to the user, +1 for the user's convenience
+            choice = input("Enter a number (or Q to quit): ")
+            if choice.lower() == "q":
+                exit()
+            elif int(choice) in range(1, len(files)+1): # Check if the user's input is a valid number
+                fileName = files[int(choice)-1] # Get the file name from the list, -1 because the list starts at 0
+                print(f"You selected {fileName}.")
+                break
+            else:
+                print("Invalid input. Please try again.")
+                continue
+        except ValueError:
+            print("Invalid input. Please try again.")
+            continue
+    
     print("Please select an option for naming the downloaded files below:")
     print("[1] By Original Name\n[2] By Video ID\n")
 
@@ -166,6 +182,7 @@ def menu():
             exit()
         elif downloadFormat == "1":
             print("\nYour files will be downloaded using a single thread.")
+            numThreads = 0
             break
         elif downloadFormat == "2":
             while True:
@@ -203,7 +220,7 @@ def menu():
             print("\nInvalid input. Please try again.")
             continue
 
-    return fileNameFormat, downloadFormat, selectedCodec, numThreads
+    return fileNameFormat, downloadFormat, selectedCodec, numThreads, fileName
 
 if __name__ == '__main__':
     #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
@@ -213,10 +230,13 @@ if __name__ == '__main__':
     audioSP = Path("Audios Folder")
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
+    idSP = Path("ID Folder")
     
-    idList = parseID("3min.txt") #input list of ids   
+    fileNameFormat, downloadFormat, selectedCodec, numThreads, fileName = menu(idSP) #calls menu function
 
-    fileNameFormat, downloadFormat, selectedCodec, numThreads = menu() #calls menu function
+    defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
+    idList = parseID("ID Folder/" + fileName)  
+    maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
 
     #--------------------------------------------
     start = time.time()
@@ -229,4 +249,8 @@ if __name__ == '__main__':
 
     totalTime = end - start
     formattedTime = str(timedelta(seconds=totalTime))
+
+    print("\nAll files have been downloaded and combined!")
     print(f"\nTotal Time: {formattedTime}")
+
+

@@ -1,6 +1,4 @@
-Audios Test Folder
-Videos Test Folder
-Combine Test Folder
+# Resource Folders
 Audios Folder
 Videos Folder
 Combine Folder
@@ -10,7 +8,6 @@ transcript
 audio
 video
 *.txt
-Makefile
 
 Video IDs
 Scripts/__pycache__
@@ -19,3 +16,14 @@ __pycache__
 
 front-end.pyt
 video_info
+Audios Test Folder
+Videos Test Folder
+Combine Test Folder
+Scripts/__pycache__
+
+# Random Test Scripts
+test.py
+
+# Completed Download Folders
+Lehigh_OFYE
+Lehigh_CAS
