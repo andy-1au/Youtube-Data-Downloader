@@ -134,21 +134,18 @@ def menu(directory):
     print("This program will download the audio and video files from a YouTube link and combine them into a single file!")
     print("--------------------------------------------")
     
-    # Get a list of all text files in the directory
-    files = [f for f in os.listdir(directory) if f.endswith('.txt')]
+    files = [f for f in os.listdir(directory) if f.endswith('.txt')] # Get a list of all text files in the directory
 
-    # Display the list of files to the user
-    print(f"Please select a file from the following list:")
+    print(f"Please select a file from the following list:") #
     while True:
         try: 
             for i, file in enumerate(files):
-                #print in [] where the number is in the []
-                print(f"[{i+1}] {file}")
+                print(f"[{i+1}] {file}") #  Display the list of files to the user, +1 for the user's convenience
             choice = input("Enter a number (or Q to quit): ")
             if choice.lower() == "q":
                 exit()
             elif int(choice) in range(1, len(files)+1): # Check if the user's input is a valid number
-                fileName = files[int(choice)-1]
+                fileName = files[int(choice)-1] # Get the file name from the list, -1 because the list starts at 0
                 print(f"You selected {fileName}.")
                 break
             else:
@@ -240,7 +237,7 @@ if __name__ == '__main__':
     defaultLink = "https://www.youtube.com/watch?v=" #default link before concat with id
     idList = parseID("ID Folder/" + fileName)  
     maxThreads = int(numThreads) #set number of threads here, 3 seems to be working fine with rtx 3060
-    
+
     #--------------------------------------------
     start = time.time()
     if downloadFormat == "1":
