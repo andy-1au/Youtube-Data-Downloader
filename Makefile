@@ -8,6 +8,7 @@ check:
 	python Scripts/Check.py
 
 newFolder:
+	echo "" >> .gitignore && \
 	echo $(name) >> .gitignore && \
 	mkdir "$(name)" && \
 	cd "$(name)" && \
