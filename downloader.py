@@ -30,20 +30,28 @@ def getVideoID(link):
         video_id = video_id.split("&")[0]
     return video_id
 
-def CaptionDownload(video_id, video_title):
+def CaptionDownload(video_id, channel_title):
     '''
     Download the transcript of the video and save it as a .txt file in SRT Format
     :param video_id: (str)
     :param video_title: (str)
     :return: None
     '''
+    dir_path = os.path.join(transcriptSavePath, channel_title)
+    
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
     try:
         srt = YouTubeTranscriptApi.get_transcript(video_id, languages=['en']) # get transcript english only
-        formatter = SRTFormatter() # format transcript to SRT format
-        savePath = os.path.join(transcriptSavePath, video_title+"_id:"+video_id+".txt")
+        formatter = SRTFormatter() # format transcript to SRT format 
+        savePath = os.path.join(dir_path, video_id+".txt")
         with open(savePath, "w") as srt_file:
             srt_file.write(formatter.format_transcript(srt))
     except:
+        print("Error: Unable to download captions for video: " + video_id)
+        with open(channel_title+"no_captions.txt", "a") as error_file:
+            error_file.write(video_id + "\n")
         return None
 
 def getChannelID(link):
@@ -84,13 +92,14 @@ async def requestVideoData(video_id):
         return response
     except:
         print("Error: Unable to get video data.")
-
-def csvFormatter(video_data, video_title, video_id):
+            
+def csvFormatter(video_data, video_id, csv_file, video_title):
     '''
     Format the video data to be saved in a csv file and save it in a folder
     :param video_data: (dict)
     :param video_title: (str)
     :param video_id: (str)
+    :param csv_file: (str)
     :return: None
     '''
     data = video_data.get("items")[0]["snippet"]
@@ -101,20 +110,45 @@ def csvFormatter(video_data, video_title, video_id):
     
     if(video_description == ""):
         video_description = "No Description"
+        
+    if(video_id.find("=") != -1):
+        video_id = video_id.split("=")[1]
+        print(video_id)
+        
+    # write if to check if the video id starts with a - and add a ' in front of it
+    if(video_id[0] == "-"):
+        video_id = '"' + video_id + '"' # add quotes to the video id if it starts with a -
+        print(video_id)
 
+        
     video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ")
     video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p")
-
+    
+    with open(csv_file, "a", encoding="utf-8", newline='') as video_info:
+        writer = csv.writer(video_info, delimiter=',',dialect='excel', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_data = [channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description]
+        writer.writerow(csv_data)
+    
+def csv_file_creator(channel_title):
+    '''
+    Create a csv file to save the video data
+    :param channel_title: (str)
+    :return: csv_file (str)
+    '''
+    if(channel_title.find("/") != -1):
+        channel_title = channel_title.replace("/", "-")
+    dir_path = os.path.join(video_infoPath, channel_title)
+    
+    if(not os.path.exists(dir_path)):
+        os.makedirs(dir_path)
+    
     csv_headers = ["channel_title", "video_id","video_title", "video_publishedAt", "video_thumbnail", "video_description"]
-    csv_data = [channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description]
-    if(video_title.find("/") != -1):
-        video_title = video_title.replace("/", "-")
-    else:
-        savePath = os.path.join(video_infoPath, video_title+".csv")
-        with open(savePath, "w", encoding="utf-16", newline='') as video_info:
-            writer = csv.writer(video_info, delimiter="\t")
-            writer.writerow(csv_headers)
-            writer.writerow(csv_data)
+    csv_file = os.path.join(dir_path,channel_title+".csv")
+    with open(csv_file, "w", encoding="utf-8", newline='') as video_info:
+        writer = csv.writer(video_info)
+        writer.writerow(csv_headers)
+    return csv_file
+
 
 async def download(channel_id):
     '''
@@ -129,7 +163,9 @@ async def download(channel_id):
     
     response = request.execute()
     channel_title = response["items"][0]["snippet"]["title"]
+    csv_file = csv_file_creator(channel_title)
     threads = [] # list of threads to run the async functions
+    
     for item in response["items"]:
         playlist_id = item["contentDetails"]["relatedPlaylists"]["uploads"] # get the playlist ID of the uploads playlist
         next_page_token = '' # set the next page token to an empty string
@@ -145,15 +181,18 @@ async def download(channel_id):
                 for playlistItem in range(len(playlistResponse['items'])) and playlistResponse['items']:
                     bar()
                     video_id = playlistItem['snippet']['resourceId']['videoId']
-                                     
+                                    
+                    if(channel_title.find("/") != -1):
+                        channel_title = channel_title.replace("/", "-")
+                        
                     with open(channel_title+".txt", "a") as video_id_file:
                         video_id_file.write(video_id+"\n")
-                        
+                    
                     video_data = await requestVideoData(video_id) # start a thread to download the transcript
                     video_title = video_data["items"][0]["snippet"]["title"]
                     
-                    threadJson = threading.Thread(target=csvFormatter, args=(video_data,video_title, video_id)) # start a thread to download the video info
-                    threadCaption = threading.Thread(target= CaptionDownload, args=(video_id,video_title)) # start a thread to download the transcript
+                    threadJson = threading.Thread(target=csvFormatter, args=(video_data, video_id, csv_file, video_title)) # start a thread to download the video info
+                    threadCaption = threading.Thread(target= CaptionDownload, args=(video_id, channel_title)) # start a thread to download the transcript
                     threads.append(threadCaption)
                     threads.append(threadJson)
                     threadCaption.start()
