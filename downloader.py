@@ -37,10 +37,15 @@ def CaptionDownload(video_id, channel_title):
     :param video_title: (str)
     :return: None
     '''
+    dir_path = os.path.join(transcriptSavePath, channel_title)
+    
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
     try:
-        srt = YouTubeTranscriptApi.get_transcript("EGbONaJ8Im0", languages=['en']) # get transcript english only
+        srt = YouTubeTranscriptApi.get_transcript(video_id, languages=['en']) # get transcript english only
         formatter = SRTFormatter() # format transcript to SRT format 
-        savePath = os.path.join(transcriptSavePath, video_id+".txt")
+        savePath = os.path.join(dir_path, video_id+".txt")
         with open(savePath, "w") as srt_file:
             srt_file.write(formatter.format_transcript(srt))
     except:
@@ -116,11 +121,11 @@ def csvFormatter(video_data, video_id, csv_file, video_title):
         print(video_id)
 
         
-    # video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ")
-    # video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p")
+    video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ")
+    video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p")
     
     with open(csv_file, "a", encoding="utf-8", newline='') as video_info:
-        writer = csv.writer(video_info, delimiter=',',dialect='excel', quotechar='"', quoting=csv.QUOTE_NONE)
+        writer = csv.writer(video_info, delimiter=',',dialect='excel', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_data = [channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description]
         writer.writerow(csv_data)
     
@@ -130,12 +135,20 @@ def csv_file_creator(channel_title):
     :param channel_title: (str)
     :return: csv_file (str)
     '''
+    if(channel_title.find("/") != -1):
+        channel_title = channel_title.replace("/", "-")
+    dir_path = os.path.join(video_infoPath, channel_title)
+    
+    if(not os.path.exists(dir_path)):
+        os.makedirs(dir_path)
+    
     csv_headers = ["channel_title", "video_id","video_title", "video_publishedAt", "video_thumbnail", "video_description"]
-    csv_file = os.path.join(video_infoPath, channel_title+".csv")
+    csv_file = os.path.join(dir_path,channel_title+".csv")
     with open(csv_file, "w", encoding="utf-8", newline='') as video_info:
         writer = csv.writer(video_info)
         writer.writerow(csv_headers)
     return csv_file
+
 
 async def download(channel_id):
     '''
@@ -143,7 +156,6 @@ async def download(channel_id):
     :param channel_id: (str)
     :return: None
     '''
-    
     request = youtube.channels().list(
         part="snippet,contentDetails",
         id= channel_id
@@ -170,6 +182,9 @@ async def download(channel_id):
                     bar()
                     video_id = playlistItem['snippet']['resourceId']['videoId']
                                     
+                    if(channel_title.find("/") != -1):
+                        channel_title = channel_title.replace("/", "-")
+                        
                     with open(channel_title+".txt", "a") as video_id_file:
                         video_id_file.write(video_id+"\n")
                     
