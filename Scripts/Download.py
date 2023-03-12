@@ -3,11 +3,9 @@ from pathlib import Path
 import os # removals and paths
 import sys # system functions
 import re # regex
- 
-from concurrent.futures import ThreadPoolExecutor # multithreading
-
 import time # time functions 
 from datetime import timedelta # time formatting 
+from concurrent.futures import ThreadPoolExecutor # multithreading
 
 #Other Modules
 from pytube import YouTube
