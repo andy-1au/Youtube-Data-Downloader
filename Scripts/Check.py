@@ -20,6 +20,7 @@ def compare(folderPath, txtFilePath):
         for id in videoIDs:
             if id not in videoFolderNames:
                 print(id)
+        # Next step is to make a txt file of the missing ids
 
 if __name__ == '__main__':
 
