@@ -14,6 +14,7 @@ def compare(folderPath, txtFilePath):
     # check if the folder contains the same videos as the txt file
     if set(videoIDs) == set(videoFolderNames):
         print("The folder contains the same videos as the txt file.")
+        exit()
     else:
         print("The folder does not contain the same videos as the txt file.")
         print("The following videos are missing:") # print the videos that are missing
@@ -26,24 +27,22 @@ def compare(folderPath, txtFilePath):
                 missingIDs.append(id)
             
         print(f"There are {numMissing} videos missing.")
-    
-    # write the missing videos to a txt file
-    txtName = txtFile[:-4] + "_Missing Videos.txt"
-    path = "ID Folder/" + txtName
-    with open(path, 'w') as f:
-        for id in missingIDs:
-            f.write(id + "\n")
-    
-    print(f"The missing videos are written to {path}")
+        # write the missing videos to a txt file
+        txtName = txtFile[:-4] + "_Missing Videos.txt"
+        path = "ID Folder/" + txtName
+        with open(path, 'w') as f:
+            for id in missingIDs:
+                f.write(id + "\n")
+        print(f"The missing videos are written to {path}")
 
 if __name__ == '__main__':
 
     # folder path 
-    videoRootFolder = "Lehigh_University"
+    videoRootFolder = "Lehigh_Nasdaq_Center"
     folderPath = videoRootFolder + "/Videos"
 
     # txt file path 
-    txtFile = "Lehigh University.txt"
+    txtFile = "Lehigh Nasdaq Center.txt"
     txtFilePath = "ID Folder/" + txtFile
 
     compare(folderPath, txtFilePath)

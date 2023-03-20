@@ -65,7 +65,8 @@ def downloadBoth(link, id):
         print("\nDownloading Video File...")
         videoObject = YouTube(link, on_progress_callback=on_progress)
         audioObject = YouTube(link, on_progress_callback=on_progress)
-
+        
+        # videoObject may be grabbed a different way for lower resolution, see if this fix the issue of noneType
         videoObject = videoObject.streams.filter(adaptive=True, file_extension='mp4').order_by('resolution').desc().first()
 
         print(f"Video Object: {videoObject}") #DEBUG
