@@ -4,17 +4,27 @@ run:
 gui: 
 	python Scripts/GUI.py
 
-removeAll:
-	make removeAudio && make removeVideo && make removeCombined
+check: 
+	python Scripts/Check.py
 
-removeAudio:
+newFolder:
+	echo "" >> .gitignore && \
+	echo $(name) >> .gitignore && \
+	mkdir "$(name)" && \
+	cd "$(name)" && \
+	mkdir Transcripts Videos Metadata
+
+clean:
+	make cleanAudio && make cleanVideo && make cleanCombined
+
+cleanAudio:
 	cd Audios\ Folder/; \
-	rm -rf *
+	rm -rf -- * 
 
-removeVideo:
+cleanVideo:
 	cd Videos\ Folder/; \
-	rm -rf *
+	rm -rf -- *
 
-removeCombined:
+cleanCombined:
 	cd Combine\ Folder/; \
-	rm -rf *
+	rm -rf -- *

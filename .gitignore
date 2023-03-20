@@ -1,3 +1,4 @@
+# Resource Folders
 Audios Folder
 Videos Folder
 Combine Folder
@@ -5,7 +6,11 @@ Subtitles Folder
 Audios Test Folder
 Videos Test Folder
 Combine Test Folder
-
-Video IDs
 Scripts/__pycache__
+
+# Random Test Scripts
 test.py
+
+# Completed Download Folders
+Lehigh_OFYE
+Lehigh_CAS
