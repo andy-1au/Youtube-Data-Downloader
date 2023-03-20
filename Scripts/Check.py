@@ -33,6 +33,8 @@ def compare(folderPath, txtFilePath):
     with open(path, 'w') as f:
         for id in missingIDs:
             f.write(id + "\n")
+    
+    print(f"The missing videos are written to {path}")
 
 if __name__ == '__main__':
 
