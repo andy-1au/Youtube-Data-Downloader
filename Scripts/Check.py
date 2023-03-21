@@ -43,12 +43,12 @@ def compare(folderPath, txtFilePath):
 if __name__ == '__main__':
 
     # folder path 
-    videoRootFolder = "Lehigh_CENG"
+    videoRootFolder = "Lehigh_CEDU"
     folderPath = videoRootFolder + "/Videos"
     # folderPath = "Combine Folder"
 
     # txt file path 
-    txtFile = "Lehigh Engineering.txt"
+    txtFile = "Lehigh College of Education.txt"
     txtFilePath = "ID Folder/" + txtFile
 
     compare(folderPath, txtFilePath)
