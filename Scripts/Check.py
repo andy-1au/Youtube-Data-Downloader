@@ -30,9 +30,9 @@ def compare(folderPath, txtFilePath):
     
         txtName = txtFile[:-4] + "_Missing Videos.txt"
         path = "ID Folder/" + txtName
-        #ask the user if they want to write the missing videos to a txt file
-        write = input(f"Do you want to write the missing videos to a txt file? (y/n) ")
-        if write.lower() != "y":
+        
+        userInput= input(f"Do you want to write the missing videos to a txt file? (y/n) ") #ask the user if they want to write the missing videos to a txt file
+        if userInput.lower() != "y":
             exit()
         else:
             with open(path, 'w') as f: # write the missing videos to a txt file
