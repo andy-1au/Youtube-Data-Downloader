@@ -32,6 +32,8 @@ def compare(folderPath, txtFilePath):
         path = "ID Folder/" + txtName
         
         userInput= input(f"Do you want to write the missing videos to a txt file? (y/n) ") #ask the user if they want to write the missing videos to a txt file
+        while userInput.lower() != "y" and userInput.lower() != "n": # check if the user input is valid
+            userInput = input("Please enter a valid input (y/n) ")
         if userInput.lower() != "y":
             exit()
         else:
@@ -44,11 +46,11 @@ if __name__ == '__main__':
 
     # folder path 
     videoRootFolder = "Lehigh_CEDU"
-    folderPath = videoRootFolder + "/Videos"
-    # folderPath = "Combine Folder"
+    # folderPath = videoRootFolder + "/Videos"
+    folderPath = "Combine Folder"
 
     # txt file path 
-    txtFile = "Lehigh College of Education.txt"
+    txtFile = "Lehigh University College of Business.txt"
     txtFilePath = "ID Folder/" + txtFile
 
     compare(folderPath, txtFilePath)
