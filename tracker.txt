@@ -13,6 +13,7 @@ Videos Done
     Lehigh_CENG
     Lehigh_CEDU
     Lehigh_CBUS
+    Lehigh_CHealth
 
 Metadata Done
 -
