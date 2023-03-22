@@ -1,7 +1,7 @@
 THIS TXT FILE WILL TRACK THE CHANNELS DATA PROGESS
 
 Fully Done
-- 
+
 
 Videos Done
     Lehigh_OFYE
@@ -16,4 +16,3 @@ Videos Done
     Lehigh_CHealth
 
 Metadata Done
--
