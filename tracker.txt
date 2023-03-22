@@ -1,12 +1,17 @@
-THIS TXT FILE WILL TRACK THE CHANNELS downloaded
+THIS TXT FILE WILL TRACK THE CHANNELS DATA PROGESS
 
 Fully Done
 - 
 
-
 Videos DOne
--
-
+- Lehigh_CAS
+- Lehigh_CEDU
+- Lehigh_CENG
+- Lehigh_Dining
+- Lehigh_Nasdaq_Center
+- Lehigh_OFYE
+- Lehigh_University
+- Baker_Institute
 
 Metadata Done
 -
