@@ -1,12 +1,28 @@
-Audios Test Folder
-Videos Test Folder
-Combine Test Folder
+# Resource Folders
 Audios Folder
 Videos Folder
 Combine Folder
-transcript
-audio
-video
-Video IDs
-*.txt
-Makefile
+Subtitles Folder
+Audios Test Folder
+Videos Test Folder
+Combine Test Folder
+Scripts/__pycache__
+
+# Random Test Scripts
+test.py
+
+# Completed Download Folders
+Lehigh_OFYE
+Lehigh_CAS
+Lehigh_University
+Lehigh_Dining
+Baker_Institute
+Lehigh_Nasdaq_Center
+Lehigh_CENG
+Lehigh_CEDU
+Lehigh_CBUS
+Lehigh_CHealth
+
+Lehigh_Engineering2
+
+ltsLehigh
