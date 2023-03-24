@@ -104,7 +104,7 @@ For Mac, you can download the latest version from [here](https://evermeet.cx/ffm
 3. Add the location of the ffmpeg executable to your PATH environment variable. 
 For Windows, you can follow the instructions [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/). 
 For Mac, you can follow the instructions [here](https://www.architectryan.com/2018/03/17/add-to-the-path-on-windows-10/).
-Make sure to add ~C:\Program Files\ffmpeg\bin~ to your PATH environment variable.
+Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable.
 
 4. Verify that ffmpeg is installed correctly by running the following command in your terminal:
 
