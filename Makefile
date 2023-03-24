@@ -15,7 +15,7 @@ newFolder:
 	mkdir Transcripts Videos Metadata
 
 clean:
-	make cleanAudio && make cleanVideo && make cleanCombined
+	make cleanAudio && make cleanVideo && make cleanCombined && make cleanSubtitles && make cleanTranscripts && make cleanMetadata
 
 cleanAudio:
 	cd Audios\ Folder/; \
@@ -27,4 +27,8 @@ cleanVideo:
 
 cleanCombined:
 	cd Combine\ Folder/; \
+	rm -rf -- *
+
+cleanSubtitles:
+	cd Subtitles\ Folder/; \
 	rm -rf -- *

@@ -1,5 +1,24 @@
 import os 
 
+def selectFile(idFolder):
+    print("\nSelect the ID text file that you want to check.\nThe text file will be checked against videos in the video folder.\n")
+    while True: 
+        for i in range(len(os.listdir(idFolder))):
+            print(f"{i+1}. {os.listdir(idFolder)[i]}")
+        userInput = input("Enter the number of the ID text file or Q to quit: ")
+        if userInput.lower() == "q":
+            exit()
+        try:
+            userInput = int(userInput)
+            if userInput < 1 or userInput > len(os.listdir(idFolder)):
+                print("Please enter a valid number.")
+            else:
+                txtFile = os.listdir(idFolder)[userInput-1]
+                break
+        except ValueError:
+            print("Please enter a valid number.")
+    return txtFile
+
 def compare(folderPath, txtFilePath):
     # read the video names from the txt file
     with open(txtFilePath, 'r') as f:
@@ -44,13 +63,10 @@ def compare(folderPath, txtFilePath):
 
 if __name__ == '__main__':
 
-    # folder path 
-    videoRootFolder = "Lehigh_CEDU"
-    # folderPath = videoRootFolder + "/Videos"
-    folderPath = "Combine Folder"
+    idFolder = "ID Folder" # folder that contains the txt files
+    videoFolder = "Combine Folder" # folder that contains the videos
 
-    # txt file path 
-    txtFile = "Lehigh University College of Health.txt"
-    txtFilePath = "ID Folder/" + txtFile
-
-    compare(folderPath, txtFilePath)
+    txtFile = selectFile(idFolder) # select the txt file that you want to check
+    txtFilePath = idFolder + "/" + txtFile
+    
+    compare(videoFolder, txtFilePath)
