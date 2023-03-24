@@ -1,5 +1,4 @@
-from datetime import datetime # for converting date
-from youtube_api import YouTubeDataAPI                          # for getting youtube video data
+from datetime import datetime # for converting date             
 from youtube_transcript_api import YouTubeTranscriptApi         # for getting transcript
 from youtube_transcript_api.formatters import SRTFormatter      # for converting transcript to SRT format
 from alive_progress import alive_bar                            # for progress bar
@@ -15,7 +14,6 @@ audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader
 transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/transcript/" # Insert save path for transcript here
 video_infoPath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video_info" # Insert save path for video info here
 
-yt = YouTubeDataAPI("AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg")  # The YouTube Data API v3 service object to make requests to the API easier
 youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg") # The YouTube Data API v3 service object to make actual requests to the API
 
 
@@ -61,7 +59,15 @@ def getChannelID(link):
     :return: channel_id (str)
     '''
     video_id = getVideoID(link)
-    channel_id = yt.get_video_metadata(video_id=video_id)['channel_id']
+    
+    request = youtube.videos().list(
+        part="snippet",
+        id = video_id
+    )
+    response = request.execute()
+
+    channel_id = response['items'][0]['snippet']['channelId']
+
     return channel_id
 
 def requestChannelData(link): # get channel ID from video ID using YouTubeDataAPI V3
