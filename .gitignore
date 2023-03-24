@@ -10,9 +10,7 @@ video
 *.txt
 
 Video IDs
-Scripts/__pycache__
 test.py
-__pycache__
 .DS_Store
 
 front-end.pyt
@@ -21,6 +19,7 @@ Audios Test Folder
 Videos Test Folder
 Combine Test Folder
 Scripts/__pycache__
+__pycache__
 
 # Random Test Scripts
 test.py
@@ -36,7 +35,5 @@ Lehigh_CENG
 Lehigh_CEDU
 Lehigh_CBUS
 Lehigh_CHealth
-
 Lehigh_Engineering2
-
 ltsLehigh

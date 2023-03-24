@@ -227,3 +227,7 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
     NOTE: make newFolder will create a new folder in the root directory of the repository. You have to specify the name of the folder as an argument. For example, if you want to create a folder named 'test', then you would run the following command: 
 
         make newFolder name=test
+
+## Credits and Acknowledgements
+
+## Copyright
