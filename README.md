@@ -3,13 +3,17 @@
 ## Table of Contents
 * [Overview](#overview)
     * [Description](#description)
+    * [Features](#features)
     * [Specifications](#specifications)
     * [Technologies Used](#technologies-used)
     * [Challenges](#challenges)
-    * [Future Features](#future-features)
+    * [Future Implementations](#future-implementations)
 * [Setting Up VSCode and Git](#setting-up-vscode-and-git)
+* [Downloading Python and Pip](#downloading-python-and-pip)
 * [Downloading External Dependencies](#downloading-external-dependencies)
-
+    * [Getting ffmpeg](#getting-ffmpeg)
+    * [Getting pytube](#getting-pytube)
+    * [Getting OpenAI's Whisper](#getting-openais-whisper)
 
 ## Overview 
 
@@ -17,15 +21,22 @@
 
 >> This project automates the process of downloading Youtube videos, metadata, and subtitles. Given a list of video IDs generated from Youtube's API, the Python script downloads the corresponding videos to a specified location. Using OpenAI's Whisper speech recognition model, the application transcribes the audio in each video to text and saves the transcript in a separate folder named after the video ID. Additionally, a CSV file is generated for each downloaded video, containing specific metadata and video contents.
 
+>### Features
+
+* Downloads videos from Youtube using the video ID.
+* Generates a CSV file for each downloaded video, containing specific metadata and video contents.
+* Transcribes the audio in each video to text using OpenAI's Whisper speech recognition model.
+* Command line interface for easy use.
+
 >### Specifications
 
-> 1. It is recommended that you use Windows for this. This was tested and built on Windows 10, but it should work on Windows 11 as well. 
+* It is recommended that you use Windows for this. This was tested and built on Windows 10, but it should work on Windows 11 as well. 
 
-> 2. The script is designed to download YouTube content at the highest quality available. To achieve this, it utilizes the Pytube API to download the video and audio separately. This allows for the highest possible resolution and audio quality.
+* The script is designed to download YouTube content at the highest quality available. To achieve this, it utilizes the Pytube API to download the video and audio separately. This allows for the highest possible resolution and audio quality.
 
-> 3. Once the video and audio are downloaded, they are combined using ffmpeg. This encoding process ensures that the final output maintains the highest quality possible. The result is a video file that has both high video and audio quality, which is important for the end user's viewing experience.
+* Once the video and audio are downloaded, they are combined using ffmpeg. This encoding process ensures that the final output maintains the highest quality possible. The result is a video file that has both high video and audio quality, which is important for the end user's viewing experience.
 
-> 4. Additionally, the script includes error handling and validation to ensure that the downloaded content is valid and can be combined using ffmpeg. If an error occurs during the download or encoding process, the script provides helpful error messages to assist the user in troubleshooting the issue.
+* Additionally, the script includes error handling and validation to ensure that the downloaded content is valid and can be combined using ffmpeg. If an error occurs during the download or encoding process, the script provides helpful error messages to assist the user in troubleshooting the issue.
 
 >### Technologies Used
 
@@ -36,24 +47,23 @@
 
 >### Challenges
 
->1. Ensuring that the correct video files were being downloaded and transcribed. We had to compare the list of video IDs provided to the files in the specified folder to make sure that we were transcribing the correct video files. 
+* Ensuring that the correct video files were being downloaded and transcribed. We had to compare the list of video IDs provided to the files in the specified folder to make sure that we were transcribing the correct video files. 
 
->2. Running the application on certain NVIDIA GPU drivers, where threading was limited to only a few instances. We are still trying to implement a workaround to handle this limitation and ensure that the transcription process was still efficient.
+* Running the application on certain NVIDIA GPU drivers, where threading was limited to only a few instances. We are still trying to implement a workaround to handle this limitation and ensure that the transcription process was still efficient.
 
->3. We had to experiment with different parameters and options in the Whisper model to improve the accuracy of the transcriptions.
+* We had to experiment with different parameters and options in the Whisper model to improve the accuracy of the transcriptions.
 
->4. The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process. 
+* The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process. 
 
->### Future Features
+>### Future Implementations
 
->1. implement additional features to enhance user experience and expand the functionality of the application. These include developing a graphical user interface (GUI) to make the application more user-friendly and accessible to non-technical users. 
+* Implement additional features to enhance user experience and expand the functionality of the application. These include developing a graphical user interface (GUI) to make the application more user-friendly and accessible to non-technical users. 
 
->2. Add support for more GPUs encoding formats, including AMD's GPU. 
+* Add support for more GPUs encoding formats, including AMD's GPU. 
 
->3. Aim to improve error handling and add more robust logging to enable users to troubleshoot any issues that arise during the video encoding process. 
+* Aim to improve error handling and add more robust logging to enable users to troubleshoot any issues that arise during the video encoding process. 
 
->4. Explore the use of machine learning techniques to further improve the accuracy of the transcriptions, and to add support for more languages to make the application more widely accessible.
-
+* Explore the use of machine learning techniques to further improve the accuracy of the transcriptions, and to add support for more languages to make the application more widely accessible.
 
 ## Setting Up VSCode and Git 
 
@@ -75,7 +85,7 @@
 
 ## Downloading Python and Pip
 
-1. Download the latest version of [Python](https://www.python.org/downloads/) for your operating system.
+1. Download Python 3.9.7 from [here](https://www.python.org/downloads/release/python-397/). We recommend using the latest version of Python 3.9.7. because Whisper is only compatible with Python 3.8-3.10.
 
 2. Install Python. Make sure to check the box that says "Add Python to PATH" during the installation process. This will allow you to run Python from the command line.
 
@@ -140,16 +150,78 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
         pip install pytube
 
-
-
 3. Verify that pytube is installed correctly by running the following command in your terminal:
     
         pip show pytube
     
-4. This is the github repository link for [pytube](https://github.com/pytube/pytube)
+4. This is the github repository link for [pytube](https://github.com/pytube/pytube), reference it if you need to troubleshoot any issues.
 
 >### Getting OpenAI's Whisper
+
+1. OpenAI's Whisper will be installed automatically when you run the following command in your terminal:
+
+        pip install -r requirements.txt
+
+2. But if you want to install it manually, run the following command in your terminal:
+
+        pip install -U openai-whisper
+
+3. Verify that OpenAI's Whisper is installed correctly by running the following command in your terminal:
+
+        pip show openai-whisper
     
+    NOTE: To update the package to the latest version of this repository, please run:
 
+        pip install --upgrade --no-deps --force-reinstall git+https://github.com/openai/whisper.git
 
+4. This is the github repository link for [OpenAI's Whisper](https://github.com/openai/whisper), reference it if you need to troubleshoot any issues.
 
+## Install Make Using Chocolatey
+
+1. Open PowerShell as Administrator and run:
+
+        Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+2. Verify that Chocolatey is installed correctly by running the following command in your terminal:
+
+        choco --version
+
+4. Install Make using Chocolatey by running the following command in your terminal:
+
+        choco install make
+
+5. Verify that Make is installed correctly by running the following command in your terminal:
+
+        make --version
+
+6. Lastly, restart your terminal or VSCode.
+
+## Running the Application
+
+1. Open the root folder of the repository in VSCode.
+
+2. Open the terminal in VSCode and run the following command:
+
+        make run
+
+3. The application will start running and you will be prompted with a CLI menu.
+
+4. Here are the main make commands that you can use:
+
+    These commands are used to run the application. You can use them to run the application with or without a GUI. You can also use them to check if videos in the video folder are already downloaded by comparing the videos to a selected text file.
+
+        make run
+        make gui
+        make check
+
+    These commands are used to clean up the folders. You can use them if you want to delete the audio, video, or combined folders. You can also use them to create new folders.
+
+        make clean
+        make cleanAudio 
+        make cleanVideo
+        make cleanCombined
+        make newFolder 
+
+    NOTE: make newFolder will create a new folder in the root directory of the repository. You have to specify the name of the folder as an argument. For example, if you want to create a folder named 'test', then you would run the following command: 
+
+        make newFolder name=test
