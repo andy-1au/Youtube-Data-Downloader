@@ -13,6 +13,7 @@ Video IDs
 Scripts/__pycache__
 test.py
 __pycache__
+.DS_Store
 
 front-end.pyt
 video_info
