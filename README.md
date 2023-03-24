@@ -21,9 +21,25 @@
 * os and subprocess Python libraries for threading
 * OpenAI's Whisper speech recognition model
 
+>### Challenges
 
+>1. Ensuring that the correct video files were being downloaded and transcribed. We had to compare the list of video IDs provided to the files in the specified folder to make sure that we were transcribing the correct video files. 
 
+>2. Running the application on certain NVIDIA GPU drivers, where threading was limited to only a few instances. We are still trying to implement a workaround to handle this limitation and ensure that the transcription process was still efficient.
 
+>3. We had to experiment with different parameters and options in the Whisper model to improve the accuracy of the transcriptions.
+
+>4. The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process. 
+
+>### Future Features
+
+>1. implement additional features to enhance user experience and expand the functionality of the application. These include developing a graphical user interface (GUI) to make the application more user-friendly and accessible to non-technical users. 
+
+>2. Add support for more GPUs encoding formats, including AMD's GPU. 
+
+>3. Aim to improve error handling and add more robust logging to enable users to troubleshoot any issues that arise during the video encoding process. 
+
+>4. Explore the use of machine learning techniques to further improve the accuracy of the transcriptions, and to add support for more languages to make the application more widely accessible.
 
 
 ## Setting Up VSCode and Git 
