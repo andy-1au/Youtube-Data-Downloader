@@ -14,6 +14,8 @@
     * [Getting ffmpeg](#getting-ffmpeg)
     * [Getting pytube](#getting-pytube)
     * [Getting OpenAI's Whisper](#getting-openais-whisper)
+* [Install Make Using Chocolatey](#install-make-using-chocolatey)
+* [Running the Application](#running-the-application)
 
 ## Overview 
 
