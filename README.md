@@ -1,5 +1,16 @@
 # Youtube Data Downloader
 
+## Table of Contents
+* [Overview](#overview)
+    * [Description](#description)
+    * [Specifications](#specifications)
+    * [Technologies Used](#technologies-used)
+    * [Challenges](#challenges)
+    * [Future Features](#future-features)
+* [Setting Up VSCode and Git](#setting-up-vscode-and-git)
+* [Downloading External Dependencies](#downloading-external-dependencies)
+
+
 ## Overview 
 
 >### Description
@@ -58,6 +69,6 @@
         
         git pull 
 
-## Downloading 
+## Downloading External Dependencies
 
 
