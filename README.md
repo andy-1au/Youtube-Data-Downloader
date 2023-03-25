@@ -16,17 +16,23 @@
     * [Getting OpenAI's Whisper](#getting-openais-whisper)
 * [Install Make Using Chocolatey](#install-make-using-chocolatey)
 * [Running the Application](#running-the-application)
+    * [How to get youtube API Key](#how-to-get-youtube-api-key)
+    * [How is the Youtube API Used](#how-is-the-youtube-api-used)       
+    * [How is Metadata Saved](#how-is-metadata-saved)
+* [Credits and Acknowledgements](#credits-and-acknowledgements)
+* [Copyright](#copyright)
 
 ## Overview 
 
 >### Description
 
->> This project automates the process of downloading Youtube videos, metadata, and subtitles. Given a list of video IDs generated from Youtube's API, the Python script downloads the corresponding videos to a specified location. Using OpenAI's Whisper speech recognition model, the application transcribes the audio in each video to text and saves the transcript in a separate folder named after the video ID. Additionally, a CSV file is generated for each downloaded video, containing specific metadata and video contents.
+>> This project automates the process of downloading Youtube videos, metadata, and subtitles. Given a list of video IDs generated from Youtube's API, the Python script downloads the corresponding videos to a specified location. Using OpenAI's Whisper speech recognition model, the application transcribes the audio in each video to text and saves the transcript in a separate folder named after the video ID. Additionally, a CSV file is generated for each downloaded channel, containing specific metadata and video contents.
 
 >### Features
 
 * Downloads videos from Youtube using the video ID.
-* Generates a CSV file for each downloaded video, containing specific metadata and video contents.
+* Generates a CSV file for each channel, containing specific metadata and video contents.
+* Generates a CSV file for each channel, containing specific metadata and video contents.
 * Transcribes the audio in each video to text using OpenAI's Whisper speech recognition model.
 * Command line interface for easy use.
 
@@ -55,7 +61,9 @@
 
 * We had to experiment with different parameters and options in the Whisper model to improve the accuracy of the transcriptions.
 
-* The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process. 
+* The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process.
+
+* The application is currently capped at 10,000 requests per day. This is due to the limitations of the Youtube API. We are currently looking into ways to increase this limit to allow for more videos to be downloaded.
 
 >### Future Implementations
 
@@ -202,13 +210,15 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
 1. Open the root folder of the repository in VSCode.
 
-2. Open the terminal in VSCode and run the following command:
+2. Before you start, make sure that you run make mainFolders in the terminal. This will create the main folders that the application uses to store the audio, video, and other files.
+
+3. Open the terminal in VSCode and run the following command:
 
         make run
 
-3. The application will start running and you will be prompted with a CLI menu.
+4. The application will start running and you will be prompted with a CLI menu.
 
-4. Here are the main make commands that you can use:
+5. Here are the main make commands that you can use:
 
     These commands are used to run the application. You can use them to run the application with or without a GUI. You can also use them to check if videos in the video folder are already downloaded by comparing the videos to a selected text file.
 
@@ -222,13 +232,71 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
         make cleanAudio 
         make cleanVideo
         make cleanCombined
+        make mainFolders
         make newFolder 
 
     NOTE: make newFolder will create a new folder in the root directory of the repository. You have to specify the name of the folder as an argument. For example, if you want to create a folder named 'test', then you would run the following command: 
 
         make newFolder name=test
 
+
+>### How to get Youtube API Key
+
+1. Create a Google Developer Account [here](https://developers.google.com/)
+
+2. Create a new project
+
+3. One the project's dashboard, click Explore & Enable APIs
+
+4. In the library, navigate to YouTube Data APIv3 under YouTube APIs
+
+5. Enable the API
+
+6. Create a credential
+
+7. You will be given a API key
+
+>### Additional Information for Youtube API
+
+Run the following command in your terminal to install the google-api-python-client for Python 3:
+
+        pip install --upgrade google-api-python-client
+
+Then include the following import statement as well as the code below it and replace the ? with you API-Key in your Python script:
+
+        import googleapiclient.discovery 
+
+        googleapiclient.discovery.build("youtube", "v3", developerKey="?") 
+
+NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+
+NOTE: Documentation for further start-up guidance can be found [here](https://developers.google.com/youtube/v3/quickstart/python)
+
+>### How is the Youtube API used
+
+1. Using the YouTubeData API we can extract video metadata and channel metadata from the YouTube Database we are able to call Web Requests to the Youtube API and get the data we need.
+
+2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is procvided [here](https://support.google.com/youtube/contact/yt_api_form)
+
+>### How is metadata Saved?
+
+1. Metadata is saved as CSV format in the root directory of the repository. The name of the file is the name of the channel the video came from. For example, if the channel is named 'test', then the metadata will be saved in a file named 'test.csv'.
+
+2. The information that is saved in the CSV file is the channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description
+
 ## Credits and Acknowledgements
 
+### Team Members
+
+* Alex Japha - Project Manager
+  * Responsible for overseeing project planning, management, and coordination.
+* Andy Lau - Developer, Tester
+  * Responsible for developing and implementing core video/audio downloading functions, including different types of video/audio formats, and video/audio conversion. 
+  * Implemented the project's user interface and ensuring seamless integration with various third-party technologies.
+  * Contributed to the development of the project's whisper audio transcription feature, utilizing advanced techniques to accurately transcribe audio files.
+* Dennis Lam - Developer
+  * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata.
+  * Scraped video transcripts in SRT format from Youtube.
 
 ## Copyright
+© 2023, Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
