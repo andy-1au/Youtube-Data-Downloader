@@ -247,13 +247,21 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
 7. You will be given a API key
 
-* Documentation fo the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+>### Additional Information for Youtube API
 
-Run the following command in your terminal to install the google-api-python-client:
+Run the following command in your terminal to install the google-api-python-client for Python 3:
 
         pip install --upgrade google-api-python-client
-        
+
+Then include the following import statement as well as the code below it and replace the ? with you API-Key in your Python script:
+
+        import googleapiclient.discovery 
+
+        googleapiclient.discovery.build("youtube", "v3", developerKey="?") 
+
 NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+
+NOTE: Documentation for further start-up guidance can be found [here](https://developers.google.com/youtube/v3/quickstart/python)
 
 >### How is the Youtube API used
 
@@ -261,7 +269,7 @@ NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developer
 
 2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is procvided [here](https://support.google.com/youtube/contact/yt_api_form)
 
->### How is MetaData Saved?
+>### How is metadata Saved?
 
 1. Metadata is saved as CSV format in the root directory of the repository. The name of the file is the name of the channel the video came from. For example, if the channel is named 'test', then the metadata will be saved in a file named 'test.csv'.
 
@@ -275,7 +283,7 @@ NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developer
 * Andy Lau - Developer, Tester
   * Responsible for developing and implementing video downloading functions, video and audio encoding, and CLI functionality. Also contributed to whipser audio transcription.
 * Dennis Lam - Developer
-   * --
+   * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata. Also scraped video transcripts in SRT format from Youtube.
 
 ## Copyright
 © 2023, Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
