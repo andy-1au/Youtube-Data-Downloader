@@ -252,6 +252,8 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 Run the following command in your terminal to install the google-api-python-client:
 
         pip install --upgrade google-api-python-client
+        
+NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
 
 >### How is the Youtube API used
 
@@ -267,4 +269,13 @@ Run the following command in your terminal to install the google-api-python-clie
 
 ## Credits and Acknowledgements
 
+### Team Members
+* Alex Japha - Project Manager
+  * Responsible for overseeing project planning, management, and coordination.
+* Andy Lau - Developer, Tester
+  * Responsible for developing and implementing video downloading functions, video and audio encoding, and CLI functionality. Also contributed to whipser audio transcription.
+* Dennis Lam - Developer
+   * --
+
 ## Copyright
+© 2023, Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
