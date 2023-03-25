@@ -55,7 +55,9 @@
 
 * We had to experiment with different parameters and options in the Whisper model to improve the accuracy of the transcriptions.
 
-* The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process. 
+* The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process.
+
+* The application is currently capped at 10,000 requests per day. This is due to the limitations of the Youtube API. We are currently looking into ways to increase this limit to allow for more videos to be downloaded.
 
 >### Future Implementations
 
@@ -227,6 +229,37 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
     NOTE: make newFolder will create a new folder in the root directory of the repository. You have to specify the name of the folder as an argument. For example, if you want to create a folder named 'test', then you would run the following command: 
 
         make newFolder name=test
+
+
+>### How to get Youtube API
+
+1. Create a Google Developer Account [here](https://developers.google.com/)
+
+2. Create a new project
+
+3. One the project's dashboard, click Explore & Enable APIs
+
+4. In the library, navigate to YouTube Data APIv3 under YouTube APIs
+
+5. Enable the API
+
+6. Create a credential
+
+7. You will be given a API key
+
+Documentation fo the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+
+>### How is the Youtube API used
+
+1. Using the YouTubeData API we can extract video metadata and channel metadata from the YouTube Database we are able to call Web Requests to the Youtube API and get the data we need.
+
+2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is procvided [here](https://support.google.com/youtube/contact/yt_api_form)
+
+>### How is MetaData Saved?
+
+1. Metadata is saved as CSV format in the root directory of the repository. The name of the file is the name of the channel the video came from. For example, if the channel is named 'test', then the metadata will be saved in a file named 'test.csv'.
+
+2. The information that is saved in the CSV file is the channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description
 
 ## Credits and Acknowledgements
 
