@@ -247,7 +247,7 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
 7. You will be given a API key
 
-Documentation fo the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
 
 >### How is the Youtube API used
 
