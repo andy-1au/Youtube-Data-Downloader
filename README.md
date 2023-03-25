@@ -247,7 +247,11 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
 7. You will be given a API key
 
-Documentation fo the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+* Documentation fo the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+
+Run the following command in your terminal to install the google-api-python-client:
+
+        pip install --upgrade google-api-python-client
 
 >### How is the Youtube API used
 
