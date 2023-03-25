@@ -289,8 +289,8 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
   * Implemented the project's user interface and ensuring seamless integration with various third-party technologies.
   * Contributed to the development of the project's whisper audio transcription feature, utilizing advanced techniques to accurately transcribe audio files.
 * Dennis Lam - Developer
-   * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata.
-   * Scraped video transcripts in SRT format from Youtube.
+  * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata.
+  * Scraped video transcripts in SRT format from Youtube.
 
 ## Copyright
 © 2023, Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
