@@ -17,16 +17,17 @@
 * [Install Make Using Chocolatey](#install-make-using-chocolatey)
 * [Running the Application](#running-the-application)
 
+
 ## Overview 
 
 >### Description
 
->> This project automates the process of downloading Youtube videos, metadata, and subtitles. Given a list of video IDs generated from Youtube's API, the Python script downloads the corresponding videos to a specified location. Using OpenAI's Whisper speech recognition model, the application transcribes the audio in each video to text and saves the transcript in a separate folder named after the video ID. Additionally, a CSV file is generated for each downloaded video, containing specific metadata and video contents.
+>> This project automates the process of downloading Youtube videos, metadata, and subtitles. Given a list of video IDs generated from Youtube's API, the Python script downloads the corresponding videos to a specified location. Using OpenAI's Whisper speech recognition model, the application transcribes the audio in each video to text and saves the transcript in a separate folder named after the video ID. Additionally, a CSV file is generated for each downloaded channel, containing specific metadata and video contents.
 
 >### Features
 
 * Downloads videos from Youtube using the video ID.
-* Generates a CSV file for each downloaded video, containing specific metadata and video contents.
+* Generates a CSV file for each channel, containing specific metadata and video contents.
 * Transcribes the audio in each video to text using OpenAI's Whisper speech recognition model.
 * Command line interface for easy use.
 
