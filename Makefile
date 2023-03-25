@@ -7,6 +7,14 @@ gui:
 check: 
 	python Scripts/Check.py
 
+mainFolders:
+	mkdir -p Audios\ Folder && \
+	mkdir -p Videos\ Folder && \
+	mkdir -p Combine\ Folder && \
+	mkdir -p Subtitles\ Folder && \
+	mkdir -p Transcripts\ Folder && \
+	mkdir -p Metadata\ Folder 
+
 newFolder:
 	echo "" >> .gitignore && \
 	echo $(name) >> .gitignore && \
