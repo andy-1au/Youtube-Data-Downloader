@@ -16,6 +16,9 @@
     * [Getting OpenAI's Whisper](#getting-openais-whisper)
 * [Install Make Using Chocolatey](#install-make-using-chocolatey)
 * [Running the Application](#running-the-application)
+    * [How to get youtube API Key](#how-to-get-youtube-api-key)
+    * [How is the Youtube API Used](#how-is-the-youtube-api-used)       
+    * [How is Metadata Saved](#how-is-metadata-saved)
 
 ## Overview 
 
@@ -231,7 +234,7 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
         make newFolder name=test
 
 
->### How to get Youtube API
+>### How to get Youtube API Key
 
 1. Create a Google Developer Account [here](https://developers.google.com/)
 
@@ -255,7 +258,7 @@ NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developer
 
 2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is procvided [here](https://support.google.com/youtube/contact/yt_api_form)
 
->### How is MetaData Saved?
+>### How is Metadata Saved?
 
 1. Metadata is saved as CSV format in the root directory of the repository. The name of the file is the name of the channel the video came from. For example, if the channel is named 'test', then the metadata will be saved in a file named 'test.csv'.
 
