@@ -3,23 +3,24 @@ Audios Folder
 Videos Folder
 Combine Folder
 Subtitles Folder
-
-transcript
-audio
-video
-*.txt
-
-Video IDs
-test.py
-.DS_Store
-
-front-end.pyt
 video_info
+Scripts Folder
+Subtitles Folder
+Metadata Folder
 Audios Test Folder
 Videos Test Folder
 Combine Test Folder
 Scripts/__pycache__
 __pycache__
+transcript
+audio
+video
+Video IDs
+.DS_Store
+
+# Resource Files
+front-end.pyt
+*.txt
 
 # Random Test Scripts
 test.py
