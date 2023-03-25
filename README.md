@@ -16,17 +16,20 @@
     * [Getting OpenAI's Whisper](#getting-openais-whisper)
 * [Install Make Using Chocolatey](#install-make-using-chocolatey)
 * [Running the Application](#running-the-application)
+    * [How to get youtube API Key](#how-to-get-youtube-api-key)
+    * [How is the Youtube API Used](#how-is-the-youtube-api-used)       
+    * [How is Metadata Saved](#how-is-metadata-saved)
 
 ## Overview 
 
 >### Description
 
->> This project automates the process of downloading Youtube videos, metadata, and subtitles. Given a list of video IDs generated from Youtube's API, the Python script downloads the corresponding videos to a specified location. Using OpenAI's Whisper speech recognition model, the application transcribes the audio in each video to text and saves the transcript in a separate folder named after the video ID. Additionally, a CSV file is generated for each downloaded video, containing specific metadata and video contents.
+>> This project automates the process of downloading Youtube videos, metadata, and subtitles. Given a list of video IDs generated from Youtube's API, the Python script downloads the corresponding videos to a specified location. Using OpenAI's Whisper speech recognition model, the application transcribes the audio in each video to text and saves the transcript in a separate folder named after the video ID. Additionally, a CSV file is generated for each channel, containing specific metadata and video contents.
 
 >### Features
 
 * Downloads videos from Youtube using the video ID.
-* Generates a CSV file for each downloaded video, containing specific metadata and video contents.
+* Generates a CSV file for each channel, containing specific metadata and video contents.
 * Transcribes the audio in each video to text using OpenAI's Whisper speech recognition model.
 * Command line interface for easy use.
 
@@ -231,7 +234,7 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
         make newFolder name=test
 
 
->### How to get Youtube API
+>### How to get Youtube API Key
 
 1. Create a Google Developer Account [here](https://developers.google.com/)
 
@@ -281,7 +284,9 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
 * Alex Japha - Project Manager
   * Responsible for overseeing project planning, management, and coordination.
 * Andy Lau - Developer, Tester
-  * Responsible for developing and implementing video downloading functions, video and audio encoding, and CLI functionality. Also contributed to whipser audio transcription.
+  * Responsible for developing and implementing core video/audio downloading functions, including different types of video/audio formats, and video/audio conversion. 
+  * Implemented the project's user interface and ensuring seamless integration with various third-party technologies.
+  * Contributed to the development of the project's whisper audio transcription feature, utilizing advanced techniques to accurately transcribe audio files.
 * Dennis Lam - Developer
    * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata. Also scraped video transcripts in SRT format from Youtube.
 
