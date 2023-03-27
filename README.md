@@ -276,7 +276,7 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
 
 1. Using the YouTubeData API we can extract video metadata and channel metadata from the YouTube Database we are able to call Web Requests to the Youtube API and get the data we need.
 
-2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is procvided [here](https://support.google.com/youtube/contact/yt_api_form)
+2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is provided [here](https://support.google.com/youtube/contact/yt_api_form)
 
 >### How is metadata Saved?
 
