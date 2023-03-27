@@ -294,6 +294,8 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
   * Responsible for developing and implementing core video/audio downloading functions, including different types of video/audio formats, and video/audio conversion. 
   * Implemented the project's user interface and ensuring seamless integration with various third-party technologies.
   * Contributed to the development of the project's whisper audio transcription feature, utilizing advanced techniques to accurately transcribe audio files.
+  * Overall responsible for the project's quality assurance and testing.
+  * [Email: andyolau888@gmail.com](mailto:andyolau888@gmail.com), [Linkedin](https://www.linkedin.com/in/andy-1au/), [Github](https://github.com/andy-1au)
 * Dennis Lam - Developer
   * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata.
   * Scraped video transcripts in SRT format from Youtube.
