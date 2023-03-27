@@ -299,4 +299,4 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
   * Scraped video transcripts in SRT format from Youtube.
 
 ## Copyright
-Lehigh University Library Special Collections © 2023, Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
+Copyright © 2023 by Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
