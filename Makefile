@@ -14,6 +14,13 @@ mainFolders:
 	mkdir -p Subtitles\ Folder && \
 	mkdir -p Transcripts\ Folder && \
 	mkdir -p Metadata\ Folder 
+	echo "" >> .gitignore && \
+	echo Audios\ Folder >> .gitignore && \
+	echo Videos\ Folder >> .gitignore && \
+	echo Combine\ Folder >> .gitignore && \
+	echo Subtitles\ Folder >> .gitignore && \
+	echo Transcripts\ Folder >> .gitignore && \
+	echo Metadata\ Folder >> .gitignore
 
 newFolder:
 	echo "" >> .gitignore && \
