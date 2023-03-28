@@ -222,11 +222,12 @@ def menu(directory):
     return fileNameFormat, downloadFormat, selectedCodec, numThreads, fileName
 
 if __name__ == '__main__':
-    #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
+    #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when running/testing the scripts
     # audioSP = Path("Insert Path Here")
     # videoSP = Path("Insert Path Here")
     # combineSP = Path("Insert Path Here")
-    audioSP = Path("Audios Folder")
+    # default paths
+    audioSP = Path("Audios Folder") 
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     idSP = Path("ID Folder")

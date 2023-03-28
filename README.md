@@ -267,7 +267,7 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
 
 1. Using the YouTubeData API we can extract video metadata and channel metadata from the YouTube Database we are able to call Web Requests to the Youtube API and get the data we need.
 
-2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is procvided [here](https://support.google.com/youtube/contact/yt_api_form)
+2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is provided [here](https://support.google.com/youtube/contact/yt_api_form)
 
 >### How is metadata Saved?
 
@@ -285,9 +285,11 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
   * Responsible for developing and implementing core video/audio downloading functions, including different types of video/audio formats, and video/audio conversion. 
   * Implemented the project's user interface and ensuring seamless integration with various third-party technologies.
   * Contributed to the development of the project's whisper audio transcription feature, utilizing advanced techniques to accurately transcribe audio files.
+  * Overall responsible for the project's quality assurance and testing.
+  * [Email: andyolau888@gmail.com](mailto:andyolau888@gmail.com), [Linkedin](https://www.linkedin.com/in/andy-1au/), [Github](https://github.com/andy-1au)
 * Dennis Lam - Developer
   * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata.
   * Scraped video transcripts in SRT format from Youtube.
 
 ## Copyright
-© 2023, Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
+Copyright © 2023 by Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.
