@@ -115,7 +115,16 @@ def downloadBoth(link, id):
 
     except Exception as e:
         print('Error: Unable to download audio and video files:', e)
-        return None
+        
+        # Try downloading using CLI scripts
+        print("Attempting to download using CLI scripts...")
+
+        # Download video
+        os.system(f"pytube {link}")
+
+        # Rename the downloaded video file to the video ID
+        # Move the video file to the combine folder 
+
 
 def multiThreadDownload(idList):  
     with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
