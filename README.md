@@ -281,7 +281,7 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
 
 * Alex Japha - Project Manager
   * Responsible for overseeing project planning, management, and coordination.
-* Andy Lau - Developer, Tester
+* Andy Lau - Lead Developer, Tester
   * Responsible for developing and implementing core video/audio downloading functions, including different types of video/audio formats, and video/audio conversion. 
   * Implemented the project's user interface and ensuring seamless integration with various third-party technologies.
   * Contributed to the development of the project's whisper audio transcription feature, utilizing advanced techniques to accurately transcribe audio files.
