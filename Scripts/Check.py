@@ -3,8 +3,9 @@ import os
 def selectFile(idFolder):
     print("\nSelect the ID text file that you want to check.\nThe text file will be checked against videos in the video folder.\n")
     while True: 
-        for i in range(len(os.listdir(idFolder))):
-            print(f"{i+1}. {os.listdir(idFolder)[i]}")
+        for i, file in enumerate(os.listdir(idFolder)): # print the txt files in the folder
+            if file.endswith(".txt"):
+                print(f"{i+1}. {file}") 
         userInput = input("Enter the number of the ID text file or Q to quit: ")
         if userInput.lower() == "q":
             exit()
