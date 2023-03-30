@@ -185,7 +185,7 @@ def menu(directory):
             break
         elif downloadFormat == "2":
             while True:
-                numThreads = input("Enter the number of threads you want to use (2-4) (or Q to quit): ")
+                numThreads = input("Enter the number of threads you want to use, recommend no more than 2 cores as some videos may be corrupted during encoding (or Q to quit): ")
                 if numThreads.lower() == "q":
                     exit()
                 if numThreads.isdigit() and int(numThreads) in range(2, 5):

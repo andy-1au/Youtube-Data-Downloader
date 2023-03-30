@@ -5,7 +5,7 @@ def selectFile(idFolder):
     while True: 
         for i, file in enumerate(os.listdir(idFolder)): # print the txt files in the folder
             if file.endswith(".txt"):
-                print(f"{i+1}. {file}") 
+                print(f"{[i+1]} {file}") 
         userInput = input("Enter the number of the ID text file or Q to quit: ")
         if userInput.lower() == "q":
             exit()
