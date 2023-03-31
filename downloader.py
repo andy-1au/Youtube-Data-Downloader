@@ -14,7 +14,10 @@ audioSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader
 transcriptSavePath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/transcript/" # Insert save path for transcript here
 video_infoPath = "/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/video_info" # Insert save path for video info here
 
-youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg") # The YouTube Data API v3 service object to make actual requests to the API
+# youtube = googleapiclient.discovery.build("youtube", "v3", developerKey="AIzaSyBXSsKWzuL06jQGffwrF_kAI75WGd2y5Rg") # The YouTube Data API v3 service object to make actual requests to the API
+api_key = os.environ.get('API_KEY')
+print(api_key)
+youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=api_key) # The YouTube Data API v3 service object to make actual requests to the API
 
 
 def getVideoID(link):
@@ -47,7 +50,7 @@ def CaptionDownload(video_id, channel_title):
         with open(savePath, "w") as srt_file:
             srt_file.write(formatter.format_transcript(srt))
     except:
-        print("Error: Unable to download captions for video: " + video_id)
+        print("ERROR: Unable to download captions for video: " + video_id)
         with open(channel_title+"no_captions.txt", "a") as error_file:
             error_file.write(video_id + "\n")
         return None
@@ -97,7 +100,7 @@ async def requestVideoData(video_id):
         response = request.execute()
         return response
     except:
-        print("Error: Unable to get video data.")
+        print("ERROR: Unable to get video data.")
             
 def csvFormatter(video_data, video_id, csv_file, video_title):
     '''
@@ -128,7 +131,16 @@ def csvFormatter(video_data, video_id, csv_file, video_title):
 
         
     video_publishedAt = datetime.strptime(video_publishedAt, "%Y-%m-%dT%H:%M:%SZ")
-    video_publishedAt = video_publishedAt.strftime("%d/%m/%Y %I:%M:%S %p")
+    video_publishedAt = video_publishedAt.strftime("%m/%d/%Y %I:%M:%S %p")
+    
+    print("\n\nMetadata -----------------------------------\n" + 
+          "\nChannel Title: " + channel_title +
+          "\nVideo ID: " + video_id +
+          "\nVideo Published At: " + video_publishedAt +
+          "\nVideo Thumbnail: " + video_thumbnail +
+          "\nVideo Description: " + video_description +
+          "\n\n------------------------------------------\n\n")
+
     
     with open(csv_file, "a", encoding="utf-8", newline='') as video_info:
         writer = csv.writer(video_info, delimiter=',',dialect='excel', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -208,8 +220,3 @@ async def download(channel_id):
                         next_page_token = playlistResponse['nextPageToken']
                     else:
                         next_page_token = None
-
-async def main():
-    link = input("Enter the link to a youtube video: ")
-    channel_id = getChannelID(link) # get channel ID from link
-    await download(channel_id)# start downloading the videos, transcripts, and video info of the channel
