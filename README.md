@@ -23,7 +23,6 @@
 
 * Downloads videos from Youtube using the video ID.
 * Generates a CSV file for each channel, containing specific metadata and video contents.
-* Generates a CSV file for each channel, containing specific metadata and video contents.
 * Transcribes the audio in each video to text using OpenAI's Whisper speech recognition model.
 * Command line interface for easy use.
 
