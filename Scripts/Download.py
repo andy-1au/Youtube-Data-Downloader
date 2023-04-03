@@ -145,7 +145,7 @@ def menu(directory):
                 exit()
             elif int(choice) in range(1, len(files)+1): # Check if the user's input is a valid number
                 fileName = files[int(choice)-1] # Get the file name from the list, -1 because the list starts at 0
-                print(f"You selected {fileName}.")
+                print(f"\nYou selected {fileName}.")
                 break
             else:
                 print("Invalid input. Please try again.")
@@ -154,7 +154,7 @@ def menu(directory):
             print("Invalid input. Please try again.")
             continue
     
-    print("Please select an option for naming the downloaded files below:")
+    print("\nPlease select an option for naming the downloaded files below:")
     print("[1] By Original Name\n[2] By Video ID\n")
 
     while True:
@@ -188,7 +188,7 @@ def menu(directory):
                 numThreads = input("Enter the number of threads you want to use, recommend no more than 2 cores as some videos may be corrupted during encoding (or Q to quit): ")
                 if numThreads.lower() == "q":
                     exit()
-                if numThreads.isdigit() and int(numThreads) in range(2, 5):
+                if numThreads.isdigit() and int(numThreads) in range(2, 6):
                     print(f"\nYour files will be downloaded using {numThreads} threads.")
                     break
                 else:
