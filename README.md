@@ -9,6 +9,9 @@
   - [Downloading External Dependencies](#downloading-external-dependencies)
   - [Install Make Using Chocolatey](#install-make-using-chocolatey)
   - [Running the Application](#running-the-application)
+    - [Threading](#threading)   
+    - [How to get Youtube API Key](#how-to-get-youtube-api-key)
+    - [Additional Information for Youtube API](#additional-information-for-youtube-api)
   - [Credits and Acknowledgements](#credits-and-acknowledgements)
     - [Team Members](#team-members)
   - [Copyright](#copyright)
@@ -77,9 +80,9 @@
 
         git clone https://github.com/andy-1au/Special-Collections-Youtube-Downloader-Project.git
 
-    Note: This step will clone the existing repository and will get you all of the most recent code, although, you won't be able to push to the remote repository 
+    NOTE: This step will clone the existing repository and will get you all of the most recent code, although, you won't be able to push to the remote repository 
 
-    Note: When trying to match your local repository with the remote repository, type this in the terminal in the root folder of the repository: 
+    NOTE: When trying to match your local repository with the remote repository, type this in the terminal in the root folder of the repository: 
         
         git pull 
 
@@ -229,6 +232,12 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
         make newFolder name=test
 
+>### Threading
+* If you are running the application via the CLI menu, you can use threading to speed up the process. The CLI has an option for running the script through single or multi-threading. 
+
+* If you are going to use the multi-threading option, you have to specify the number of threads that you want to use. Additionally, if you're using a commerical NVIDIA GPU (non-Tesla or Quadro series), you will have to bypass the NVIDIA drivers for their support of only 2 simultaneous sessions. Reference this [link](https://github.com/keylase/nvidia-patch/tree/master/win#version-table) for more information. 
+
+* NOTE: NVIDIA drivers currently only supports up to 5 simultaneous sessions according to their [website](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new#Encoder). 
 
 >### How to get Youtube API Key
 
@@ -236,7 +245,7 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
 2. Create a new project
 
-3. One the project's dashboard, click Explore & Enable APIs
+3. On the project's dashboard, click Explore & Enable APIs
 
 4. In the library, navigate to YouTube Data APIv3 under YouTube APIs
 
@@ -268,7 +277,7 @@ NOTE: Documentation for further start-up guidance can be found [here](https://de
 
 2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is provided [here](https://support.google.com/youtube/contact/yt_api_form)
 
->### How is metadata Saved?
+>### How is Metadata Saved?
 
 1. Metadata is saved as CSV format in the root directory of the repository. The name of the file is the name of the channel the video came from. For example, if the channel is named 'test', then the metadata will be saved in a file named 'test.csv'.
 
