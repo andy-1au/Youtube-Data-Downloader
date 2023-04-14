@@ -6,9 +6,6 @@ Subtitles Folder
 Scripts Folder
 Subtitles Folder
 Metadata Folder
-Audios Test Folder
-Videos Test Folder
-Combine Test Folder
 Scripts/__pycache__
 
 # Random Test Scripts
@@ -31,3 +28,9 @@ LUArtGalleries
 
 # Others
 .DS_Store
+Audios Folder
+Videos Folder
+Combine Folder
+Subtitles Folder
+Transcripts Folder
+Metadata Folder
