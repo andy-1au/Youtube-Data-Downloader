@@ -7,7 +7,7 @@ import time # time functions
 from datetime import timedelta # time formatting 
 from concurrent.futures import ThreadPoolExecutor # multithreading
 
-#Other Modules
+#Third Party Modules
 from pytube import YouTube
 from pytube.cli import on_progress  # for progress bar in terminal
 import ffmpeg

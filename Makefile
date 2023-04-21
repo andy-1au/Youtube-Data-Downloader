@@ -1,4 +1,7 @@
-run:
+runNew: 
+	python Scripts/Download2.py
+
+runOld:
 	python Scripts/Download.py
 
 gui: 
