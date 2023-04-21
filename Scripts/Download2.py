@@ -12,7 +12,19 @@ import yt_dlp # YouTube Downloader
 import tqdm # progress bar
 
  
+def download(ydl_opts, idList, fileNameFormat):
+    if fileNameFormat == "1":
+        ydl_opts['outtmpl'] = str(combineSP / '%(title)s.%(ext)s')
+    elif fileNameFormat == "2":
+        ydl_opts['outtmpl'] = str(combineSP / '%(id)s.%(ext)s')
 
+    for video_id in idList:
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([video_id])
+        except yt_dlp.utils.DownloadError:
+            print(f"Video {video_id} not downloaded. Skipping...")
+            continue
 
 def parseID(file):
     with open(file, 'r') as f: # 'with' closes the file for you
@@ -64,11 +76,6 @@ def menu(directory):
             continue
     return fileNameFormat, fileName
 
-
-
-
-
-
 if __name__ == '__main__':
     audioSP = Path("Audios Folder")
     videoSP = Path("Videos Folder")
@@ -79,7 +86,7 @@ if __name__ == '__main__':
 
     idList = parseID("ID Folder/" + fileName)  
 
-    print(idList)
+    print("List of ids:" + str(idList))
 
     ydl_opts = {
         # Download Options
@@ -94,7 +101,7 @@ if __name__ == '__main__':
         'gpu': True,
 
         # Performance Options
-        # 'n_threads': 8,
+        'n_threads': 8, # not sure if this is working
 
         # Conflict Resolution Options
         'nooverwrites': False, # Overwrite files if they already exist (default: True)
@@ -105,8 +112,7 @@ if __name__ == '__main__':
 
     start = time.time()
     #----------------------------------------------
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download(idList) # Download the videos from the list of IDs links
+    download(ydl_opts, idList, fileNameFormat)
     #----------------------------------------------
     end = time.time()
 
