@@ -82,12 +82,25 @@ if __name__ == '__main__':
     print(idList)
 
     ydl_opts = {
-        'format': 'bestvideo+bestaudio/best',
-        'outtmpl': str(combineSP / '%(id)s'), # save videos in the combineSP directory with the ID as the file name
-        'merge_output_format': 'mp4', # added option to merge video and audio into an mp4 file
-        'video-codec': 'nvenc', # added option to use the Nvidia GPU to encode the video
-        'n_threads': 8, # added option to use 8 threads to download the video
-        'nooverwrites': True,  # added option to skip downloading existing videos (default is set to True, set to False to overwrite existing videos)
+        # Download Options
+        'format': 'best',
+        'outtmpl': str(combineSP / '%(id)s.mp4'),
+
+        # Post-processing Options
+        'merge_output_format': 'mp4',
+
+        # Hardware Acceleration Options
+        'video-codec': 'nvenc',
+        'gpu': True,
+
+        # Performance Options
+        # 'n_threads': 8,
+
+        # Conflict Resolution Options
+        'nooverwrites': False, # Overwrite files if they already exist (default: True)
+
+        # External Downloader Options
+        'external_downloader': 'ffmpeg',
     }
 
     start = time.time()
@@ -102,3 +115,5 @@ if __name__ == '__main__':
 
     print("\nAll files have been downloaded and combined!")
     print(f"\nTotal Time: {formattedTime}")
+
+    #"C:\Program Files\ffmpeg\bin\ffmpeg.exe"
