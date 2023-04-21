@@ -1,17 +1,13 @@
 #Python Modules
 from pathlib import Path
 import os # removals and paths
-import sys # system functions
-import re # regex
 import time # time functions 
 from datetime import timedelta # time formatting 
 from concurrent.futures import ThreadPoolExecutor
 
 # Third Party Modules
 import yt_dlp # YouTube Downloader
-import tqdm # progress bar
 
- 
 def download(ydl_opts, idList, fileNameFormat):
     if fileNameFormat == "1":
         ydl_opts['outtmpl'] = str(combineSP / '%(title)s.%(ext)s')
@@ -121,5 +117,3 @@ if __name__ == '__main__':
 
     print("\nAll files have been downloaded and combined!")
     print(f"\nTotal Time: {formattedTime}")
-
-    #"C:\Program Files\ffmpeg\bin\ffmpeg.exe"
