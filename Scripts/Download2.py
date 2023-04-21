@@ -8,8 +8,8 @@ from datetime import timedelta # time formatting
 from concurrent.futures import ThreadPoolExecutor
 
 # Third Party Modules
-import yt_dlp 
-
+import yt_dlp # YouTube Downloader
+import tqdm # progress bar
 
  
 
@@ -83,9 +83,22 @@ if __name__ == '__main__':
 
     ydl_opts = {
         'format': 'bestvideo+bestaudio/best',
-        'outtmpl': str(combineSP / '%(id)s.mp4'), # save videos in the combineSP directory with the ID as the file name and mp4 extension
-        'merge_output_format': 'mp4' # added option to merge video and audio into an mp4 file
+        'outtmpl': str(combineSP / '%(id)s'), # save videos in the combineSP directory with the ID as the file name
+        'merge_output_format': 'mp4', # added option to merge video and audio into an mp4 file
+        'video-codec': 'nvenc', # added option to use the Nvidia GPU to encode the video
+        'n_threads': 8, # added option to use 8 threads to download the video
+        'nooverwrites': True,  # added option to skip downloading existing videos (default is set to True, set to False to overwrite existing videos)
     }
 
-    # with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-    #     ydl.download(idList) # Download the videos from the list of IDs links
+    start = time.time()
+    #----------------------------------------------
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download(idList) # Download the videos from the list of IDs links
+    #----------------------------------------------
+    end = time.time()
+
+    totalTime = end - start
+    formattedTime = str(timedelta(seconds=totalTime))
+
+    print("\nAll files have been downloaded and combined!")
+    print(f"\nTotal Time: {formattedTime}")
