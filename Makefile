@@ -47,3 +47,18 @@ cleanCombined:
 cleanSubtitles:
 	cd Subtitles\ Folder/; \
 	rm -rf -- *
+
+help: 
+	"make run: Download all the videos from the list of links in the file Links.txt" && \
+	"make gui: Run the GUI to download the videos" && \
+	"make check: Check if all the videos are downloaded" && \
+	"make mainFolders: Create the main folders" && \
+	"make newFolder name=<name>: Create a new folder with the name <name>" && \
+	"make clean: Clean all the folders" && \
+	"make cleanAudio: Clean the Audios Folder" && \
+	"make cleanVideo: Clean the Videos Folder" && \
+	"make cleanCombined: Clean the Combined Folder" && \
+	"make cleanSubtitles: Clean the Subtitles Folder" && \
+	"make cleanTranscripts: Clean the Transcripts Folder" && \
+	"make cleanMetadata: Clean the Metadata Folder" && \
+	"make help: Print this help message"
