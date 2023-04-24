@@ -11,6 +11,7 @@ Metadata Folder
 # Resource Files
 front-end.pyt
 *.txt
+Scripts/__pycache__
 
 # Random Test Scripts
 test.py
@@ -33,3 +34,4 @@ Zoellner
 TheBrownAndWhite_1
 TheBrownAndWhite_2
 Lehigh_Alumni
+LUArtGalleries

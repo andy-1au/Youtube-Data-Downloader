@@ -1,0 +1,10 @@
+QWidget {
+    background-color: white;
+
+    font-size: 18pt;
+    font-family: Arial;
+    font-weight: bold;
+
+    border: 1px solid black;
+    
+}

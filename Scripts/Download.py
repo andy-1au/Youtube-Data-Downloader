@@ -7,7 +7,7 @@ import time # time functions
 from datetime import timedelta # time formatting 
 from concurrent.futures import ThreadPoolExecutor # multithreading
 
-#Other Modules
+#Third Party Modules
 from pytube import YouTube
 from pytube.cli import on_progress  # for progress bar in terminal
 import ffmpeg
@@ -115,7 +115,29 @@ def downloadBoth(link, id):
 
     except Exception as e:
         print('Error: Unable to download audio and video files:', e)
-        return None
+        
+        # Try downloading using CLI scripts
+        print("Attempting to download using CLI scripts...")
+
+        # Download video
+        os.system(f"pytube {link}")
+
+        # Get video name
+        videoObject = YouTube(link, on_progress_callback=on_progress)
+        videoName = videoObject.title
+
+        # Rename video file if user selected option 2
+        if fileNameFormat == "2":
+            videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
+            videoName = videoName + ".mp4"
+            print(f"Video Name: {videoName}") #DEBUG
+            # Rename video file
+            os.rename(f"{videoName}", f"{id}.mp4")
+            videoName = id + ".mp4"
+
+        # Move the video file to the combine folder 
+        os.move(f"{videoName}, {combineSP}")
+
 
 def multiThreadDownload(idList):  
     with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
