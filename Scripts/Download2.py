@@ -3,7 +3,6 @@ from pathlib import Path
 import os # removals and paths
 import time # time functions 
 from datetime import timedelta # time formatting 
-from concurrent.futures import ThreadPoolExecutor
 
 # Third Party Modules
 import yt_dlp # YouTube Downloader
