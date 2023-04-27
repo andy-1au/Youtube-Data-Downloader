@@ -1,5 +1,3 @@
-Baker_Institute
-Lehigh_CAS
-Lehigh_CEDU
-
-
+LU WGSS
+Baker Institute
+Lehigh University
