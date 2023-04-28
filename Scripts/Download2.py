@@ -3,7 +3,6 @@ from pathlib import Path
 import os # removals and paths
 import time # time functions 
 from datetime import timedelta # time formatting 
-from concurrent.futures import ThreadPoolExecutor
 
 # Third Party Modules
 import yt_dlp # YouTube Downloader
@@ -87,7 +86,11 @@ if __name__ == '__main__':
     ydl_opts = {
         # Download Options
         'format': 'best',
-        'outtmpl': str(combineSP / '%(id)s.mp4'),
+
+        # Subtitle Options (in the works)
+        # 'writesubtitles': True,
+        # 'subtitlesformat': 'srt',
+        # 'subtitleslangs': ['en'],
 
         # Post-processing Options
         'merge_output_format': 'mp4',

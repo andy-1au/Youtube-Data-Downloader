@@ -16,22 +16,11 @@ Scripts/__pycache__
 # Random Test Scripts
 test.py
 
-# Completed Download Folders
-Lehigh_OFYE
-Lehigh_CAS
-Lehigh_University
-Lehigh_Dining
-Baker_Institute
-Lehigh_Nasdaq_Center
-Lehigh_CENG
-Lehigh_CEDU
-Lehigh_CBUS
-Lehigh_CHealth
-Lehigh_Engineering2
-ltsLehigh
-Marching97
-Zoellner
-TheBrownAndWhite_1
-TheBrownAndWhite_2
-Lehigh_Alumni
-LUArtGalleries
+# Others
+.DS_Store
+Audios Folder
+Videos Folder
+Combine Folder
+Subtitles Folder
+Transcripts Folder
+Metadata Folder
