@@ -23,8 +23,8 @@ yt_dlp_captions_options = {
     'skip_download': True,
     'extract_flat': True,
     'captions_only': True,
-    'writeautomaticsub': True,
     'subtitlesformat': 'srt',
+    'writeautomaticsub': True,
 }
 
 #dict_keys(['id', 'title', 'formats', 'thumbnails', 'thumbnail', 'description', 'uploader', 'uploader_id', 'uploader_url', 'channel_id', 'channel_url', 'duration', 'view_count', 'average_rating', 'age_limit', 'webpage_url', 'categories', 'tags', 'playable_in_embed', 'live_status', 'release_timestamp', '_format_sort_fields', 'automatic_captions', 'subtitles', 'comment_count', 'chapters', 'like_count', 'channel', 'channel_follower_count', 'upload_date', 'availability', 'original_url', 'webpage_url_basename', 'webpage_url_domain', 'extractor', 'extractor_key', 'playlist_count', 'playlist', 'playlist_id', 'playlist_title', 'playlist_uploader', 'playlist_uploader_id', 'n_entries', 'playlist_index', '__last_playlist_index', 'playlist_autonumber', 'display_id', 'fulltitle', 'duration_string', 'is_live', 'was_live', 'requested_subtitles', '_has_drm', 'requested_formats', 'format', 'format_id', 'ext', 'protocol', 'language', 'format_note', 'filesize_approx', 'tbr', 'width', 'height', 'resolution', 'fps', 'dynamic_range', 'vcodec', 'vbr', 'stretched_ratio', 'aspect_ratio', 'acodec', 'abr', 'asr', 'audio_channels'])
@@ -64,7 +64,7 @@ def extract_metadata(channel_url, output_path):
             
     return metadata
 
-def extract_metadata_threaded(channel_url, metadata_put_path, id_file_output_path):
+def extract_metadata_threaded(metadata_put_path, video_id_list, channel_name):
     
     num_cpus = multiprocessing.cpu_count()
 
@@ -75,16 +75,10 @@ def extract_metadata_threaded(channel_url, metadata_put_path, id_file_output_pat
 
     thread = []
 
-    result = extract_video_ids_threaded(channel_url, id_file_output_path)
-    channel_name = result[0]
-    video_id = deque(result[1])
-    deque_video_id = split_deque(video_id, num_threads) # n is the number of threads we want to use as well the number of parts we split the work load into
+    deque_video_id = split_deque(video_id_list, num_threads) # n is the number of threads we want to use as well the number of parts we split the work load into
     
     if(metadata_put_path[-1] != '/'):
         metadata_put_path += '/'
-        
-    if(id_file_output_path[-1] != '/'):
-        id_file_output_path += '/'
         
     with open(metadata_put_path+channel_name+".csv", 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
@@ -169,32 +163,22 @@ def extract_video_id(metadata, output_path):
                 data['id'] = "'"+data['id']+"'"
             txtfile.write(data['id']+'\n')
         
-def extract_captions(video_id, output_path):
+def extract_captions(video_id_list, output_path, channel_name):
     
     if(output_path[-1] != '/'):
-        output_path += '/'
-        
-    yt_dlp_captions_options['outtmpl'] = output_path
+        output_path += '/' + channel_name + '/'
     
-    ydl = yt_dlp.YoutubeDL(yt_dlp_captions_options)
-    ydl.download(['https://www.youtube.com/watch?v='+video_id])
-    
-# help(yt_dlp)
-extract_metadata_threaded('https://www.youtube.com/channel/UCGgkJ72TwkiIGuA40HagpPw', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/Metadata', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/IDS')
-# extract_metadata_threaded('https://www.youtube.com/@LehighU', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/Metadata', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/IDS')
-
-
-# def my_hook(d):
-#     print(d['status'])
-    
-# yt_dlp_options = {
-#     'skip_download': True,
-#     'extract_flat': True,
-#     'skip_playlist_metadata': True,
-#     'progress_hooks': [my_hook],
-# }
-
-# with yt_dlp.YoutubeDL(yt_dlp_id_options) as ydl:
-#     metadata = ydl.extract_info('https://www.youtube.com/@LehighU', download=False)
+    for video in video_id_list:
+        yt_dlp_captions_options['outtmpl'] = output_path+video
+        ydl = yt_dlp.YoutubeDL(yt_dlp_captions_options)
+        ydl.download(['https://www.youtube.com/watch?v='+video])
 
     
+def main(channel_url, video_id_output_path, metadata_output_path, captions_output_path):
+    result = extract_video_ids_threaded(channel_url, video_id_output_path)
+    channel_name = result[0]
+    video_id_list = result[1]
+    extract_captions(video_id_list, captions_output_path, channel_name)
+    extract_metadata_threaded(metadata_output_path, video_id_list, channel_name)
+    
+main('https://www.youtube.com/channel/UCGgkJ72TwkiIGuA40HagpPw', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/IDS', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/Metadata', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/Transcript')
