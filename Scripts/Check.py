@@ -17,6 +17,7 @@ def selectFile(idFolder):
                 break
         except ValueError:
             print("Please enter a valid number.")
+    print(f"You selected {txtFile}.")
     return txtFile
 
 def compare(folderPath, txtFilePath):

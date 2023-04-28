@@ -112,3 +112,23 @@ clean_subtitles:
 clean_transcripts:
 	cd Transcripts\ Folder/; \
 	rm -rf -- *
+
+help:
+	@echo "Available targets:"
+	@echo "  run_new           - Runs the Download2.py script"
+	@echo "  run_old           - Runs the Download.py script"
+	@echo "  gui               - Runs the GUI.py script"
+	@echo "  check             - Runs the Check.py script"
+	@echo "  main_folders      - Creates the main folders and adds them to .gitignore"
+	@echo "  new_folder        - Creates a new folder with Transcripts, Videos, and Metadata subfolders"
+	@echo "  copy              - Copies files from Combine Folder to a specified destination folder"
+	@echo "  transfer          - Transfers a folder from C_PATH to D_PATH"
+	@echo "  f_info            - Prints the number of files and total size of a specified folder"
+	@echo "  vf_info           - Prints the number of files and total size of a specified folder's Videos subdirectory"
+	@echo "  clean             - Cleans all folders (audio, video, combined, subtitles, transcripts)"
+	@echo "  clean_audio       - Cleans the Audios Folder"
+	@echo "  clean_video       - Cleans the Videos Folder"
+	@echo "  clean_combined    - Cleans the Combine Folder"
+	@echo "  clean_subtitles   - Cleans the Subtitles Folder"
+	@echo "  clean_transcripts - Cleans the Transcripts Folder"
+	@echo "  help              - Displays this help message"
