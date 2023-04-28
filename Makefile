@@ -14,6 +14,17 @@ gui:
 check: 
 	python Scripts/Check.py
 
+do_all:
+	@if [ -z "$(folder)" ]; then \
+		echo "Calls all targets (copy, info, transfer) in the correct order"; \
+		echo "Usage: make move_folder folder=<folder_name>"; \
+		exit 1; \
+	fi
+	$(MAKE) copy folder="$(folder)" && \
+	$(MAKE) f_info folder="$(folder)" && \
+	$(MAKE) vf_info folder="$(folder)" && \
+	$(MAKE) transfer folder="$(folder)" 
+
 main_folders:
 	mkdir -p Audios\ Folder && \
 	mkdir -p Videos\ Folder && \
@@ -42,29 +53,19 @@ new_folder:
 	@echo "New folder: $(name) created"
 
 copy:
-	@if [ -z "$(dst)" ]; then \
+	@if [ -z "$(folder)" ]; then \
 		echo "Copies files from $(source_folder) to destination folder"; \
-		echo "Usage: make copy dst=<destination_folder>"; \
+		echo "Usage: make copy folder=<destination_folder>"; \
 		exit 1; \
 	fi
-	@echo "Transferring files from $(source_folder) to $(dst)/Videos"
-	@mkdir -p "$(dst)/Videos"
-	@mkdir -p "$(dst)/Metadata"
-	@mkdir -p "$(dst)/Transcripts"
-	@cp -r "$(source_folder)"/* "$(dst)/Videos"/ 
+	@echo "Transferring files from $(source_folder) to $(folder)/Videos"
+	@mkdir -p "$(folder)/Videos"
+	@mkdir -p "$(folder)/Metadata"
+	@mkdir -p "$(folder)/Transcripts"
+	@cp -r "$(source_folder)"/* "$(folder)/Videos"/ 
 	@echo "Removing files from $(source_folder)"
 	@$(MAKE) clean_combined 
 	@echo "Transfer complete"
-
-transfer:
-	@if [ -z "$(folder)" ]; then \
-		echo "Transfers folder from $(C_PATH) to $(D_PATH)"; \
-		echo "Usage: make transfer folder=<folder_name>"; \
-		exit 1; \
-	fi
-	@echo "Moving folder $(folder) from $(C_PATH) to $(D_PATH)"
-	@mv "$(C_PATH)/$(folder)" "$(D_PATH)"
-	@echo "Folder moved successfully"
 
 f_info:
 	@if [ -z "$(folder)" ]; then \
@@ -89,6 +90,16 @@ vf_info:
 	total_size=`du -sh "$(folder)/Videos" | cut -f1` && \
 	echo "Number of files: $$file_count" && \
 	echo "Total size: $$total_size"
+
+transfer:
+	@if [ -z "$(folder)" ]; then \
+		echo "Transfers folder from $(C_PATH) to $(D_PATH)"; \
+		echo "Usage: make transfer folder=<folder_name>"; \
+		exit 1; \
+	fi
+	@echo "Moving folder $(folder) from $(C_PATH) to $(D_PATH)"
+	@mv "$(C_PATH)/$(folder)" "$(D_PATH)"
+	@echo "Folder moved successfully"
 
 clean:
 	make clean_audio && make clean_video && make clean_combined && make clean_subtitles && make clean_transcripts
@@ -119,6 +130,7 @@ help:
 	@echo "  run_old           - Runs the Download.py script"
 	@echo "  gui               - Runs the GUI.py script"
 	@echo "  check             - Runs the Check.py script"
+	@echo "  do_all            - Calls all targets (copy, info, transfer) in the correct order"
 	@echo "  main_folders      - Creates the main folders and adds them to .gitignore"
 	@echo "  new_folder        - Creates a new folder with Transcripts, Videos, and Metadata subfolders"
 	@echo "  copy              - Copies files from Combine Folder to a specified destination folder"
