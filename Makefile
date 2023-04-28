@@ -1,5 +1,6 @@
 C_PATH := /c/Special-Collections-Youtube-Downloader-Project
 D_PATH := /d/Channels
+source_folder := Combine Folder
 
 run_new: 
 	python Scripts/Download2.py
@@ -40,17 +41,17 @@ new_folder:
 	mkdir Transcripts Videos Metadata
 	@echo "New folder: $(name) created"
 
-transfer_folder:
-	@if [ -z "$(src)" ] || [ -z "$(dst)" ]; then \
-		echo "Usage: make transfer_folder src=<source_folder> dst=<destination_folder>"; \
+transfer:
+	@if [ -z "$(dst)" ]; then \
+		echo "Usage: make transfer dst=<destination_folder>"; \
 		exit 1; \
 	fi
-	@echo "Transferring files from $(src) to $(dst)/Videos"
+	@echo "Transferring files from $(source_folder) to $(dst)/Videos"
 	@mkdir -p "$(dst)/Videos"
 	@mkdir -p "$(dst)/Metadata"
 	@mkdir -p "$(dst)/Transcripts"
-	@cp -r "$(src)"/* "$(dst)/Videos"/ 
-	@echo "Removing files from $(src)"
+	@cp -r "$(source_folder)"/* "$(dst)/Videos"/ 
+	@echo "Removing files from $(source_folder)"
 	@$(MAKE) clean_combined 
 	@echo "Transfer complete"
 
@@ -63,9 +64,9 @@ move_folder:
 	@mv "$(C_PATH)/$(folder)" "$(D_PATH)"
 	@echo "Folder moved successfully"
 
-folder_info:
+f_info:
 	@if [ -z "$(folder)" ]; then \
-		echo "Usage: make folder_info folder=<folder_path>"; \
+		echo "Usage: make f_info folder=<folder_path>"; \
 		exit 1; \
 	fi
 	@echo "Checking number of files and total size of $(folder)"
@@ -74,9 +75,9 @@ folder_info:
 	echo "Number of files: $$file_count" && \
 	echo "Total size: $$total_size"
 
-video_folder_info:
+vf_info:
 	@if [ -z "$(folder)" ]; then \
-		echo "Usage: make video_folder_info folder=<folder_path>"; \
+		echo "Usage: make vf_info folder=<folder_path>"; \
 		exit 1; \
 	fi
 	@echo "Checking number of files and total size of $(folder)"
