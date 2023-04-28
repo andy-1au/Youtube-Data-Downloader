@@ -1,7 +1,10 @@
-runNew: 
+C_PATH := /c/Special-Collections-Youtube-Downloader-Project
+D_PATH := /d/Channels
+
+run_new: 
 	python Scripts/Download2.py
 
-runOld:
+run_old:
 	python Scripts/Download.py
 
 gui: 
@@ -10,29 +13,7 @@ gui:
 check: 
 	python Scripts/Check.py
 
-folderInfo:
-	@if [ -z "$(folder)" ]; then \
-		echo "Usage: make folder_info folder=<folder_path>"; \
-		exit 1; \
-	fi
-	@echo "Checking number of files and total size of $(folder)"
-	@file_count=`find "$(folder)" -type f | wc -l` && \
-	total_size=`du -sh "$(folder)" | cut -f1` && \
-	echo "Number of files: $$file_count" && \
-	echo "Total size: $$total_size"
-
-videoFolderInfo
-	if [ -z "$(folder)" ]; then \
-		echo "Usage: make videoFolderInfo folder=<folder_path>"; \
-		exit 1; \
-	fi
-	@echo "Checking number of files and total size of $(folder)"
-	@file_count=`find "$(folder)" -type f -name "*.mp4" | wc -l` && \
-	total_size=`du -sh "$(folder)" | cut -f1` && \
-	echo "Number of files: $$file_count" && \
-	echo "Total size: $$total_size"
-
-mainFolders:
+main_folders:
 	mkdir -p Audios\ Folder && \
 	mkdir -p Videos\ Folder && \
 	mkdir -p Combine\ Folder && \
@@ -47,9 +28,9 @@ mainFolders:
 	echo Transcripts\ Folder >> .gitignore && \
 	echo Metadata\ Folder >> .gitignore
 
-newFolder:
+new_folder:
 	@if [ -z "$(name)" ]; then \
-		echo "Usage: make newFolder name=<folder_name>"; \
+		echo "Usage: make new_folder name=<folder_name>"; \
 		exit 1; \
 	fi
 	@echo "" >> .gitignore && \
@@ -59,9 +40,9 @@ newFolder:
 	mkdir Transcripts Videos Metadata
 	@echo "New folder: $(name) created"
 
-transferFolder:
+transfer_folder:
 	@if [ -z "$(src)" ] || [ -z "$(dst)" ]; then \
-		echo "Usage: make transferFolder src=<source_folder> dst=<destination_folder>"; \
+		echo "Usage: make transfer_folder src=<source_folder> dst=<destination_folder>"; \
 		exit 1; \
 	fi
 	@echo "Transferring files from $(src) to $(dst)/Videos"
@@ -70,25 +51,59 @@ transferFolder:
 	@mkdir -p "$(dst)/Transcripts"
 	@cp -r "$(src)"/* "$(dst)/Videos"/ 
 	@echo "Removing files from $(src)"
-	@$(MAKE) cleanCombined 
+	@$(MAKE) clean_combined 
 	@echo "Transfer complete"
 
+move_folder:
+	@if [ -z "$(folder)" ]; then \
+		echo "Usage: make move_folder folder=<folder_name>"; \
+		exit 1; \
+	fi
+	@echo "Moving folder $(folder) from $(C_PATH) to $(D_PATH)"
+	@mv "$(C_PATH)/$(folder)" "$(D_PATH)"
+	@echo "Folder moved successfully"
+
+folder_info:
+	@if [ -z "$(folder)" ]; then \
+		echo "Usage: make folder_info folder=<folder_path>"; \
+		exit 1; \
+	fi
+	@echo "Checking number of files and total size of $(folder)"
+	@file_count=`find "$(folder)" -type f | wc -l` && \
+	total_size=`du -sh "$(folder)" | cut -f1` && \
+	echo "Number of files: $$file_count" && \
+	echo "Total size: $$total_size"
+
+video_folder_info:
+	@if [ -z "$(folder)" ]; then \
+		echo "Usage: make video_folder_info folder=<folder_path>"; \
+		exit 1; \
+	fi
+	@echo "Checking number of files and total size of $(folder)"
+	@file_count=`find "$(folder)" -type f | wc -l` && \
+	total_size=`du -sh "$(folder)" | cut -f1` && \
+	echo "Number of files: $$file_count" && \
+	echo "Total size: $$total_size"
 
 clean:
-	make cleanAudio && make cleanVideo && make cleanCombined && make cleanSubtitles && make cleanTranscripts && make cleanMetadata
+	make clean_audio && make clean_video && make clean_combined && make clean_subtitles && make clean_transcripts
 
-cleanAudio:
+clean_audio:
 	cd Audios\ Folder/; \
 	rm -rf -- * 
 
-cleanVideo:
+clean_video:
 	cd Videos\ Folder/; \
 	rm -rf -- *
 
-cleanCombined:
+clean_combined:
 	cd Combine\ Folder/; \
 	rm -rf -- *
 
-cleanSubtitles:
+clean_subtitles:
 	cd Subtitles\ Folder/; \
+	rm -rf -- *
+
+clean_transcripts:
+	cd Transcripts\ Folder/; \
 	rm -rf -- *
