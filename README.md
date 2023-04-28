@@ -9,7 +9,12 @@
   - [Downloading External Dependencies](#downloading-external-dependencies)
   - [Install Make Using Chocolatey](#install-make-using-chocolatey)
   - [Running the Application](#running-the-application)
-
+    - [Threading](#threading)   
+    - [How to get Youtube API Key](#how-to-get-youtube-api-key)
+    - [Additional Information for Youtube API](#additional-information-for-youtube-api)
+  - [Credits and Acknowledgements](#credits-and-acknowledgements)
+    - [Team Members](#team-members)
+  - [Copyright](#copyright)
 
 ## Overview 
 
@@ -49,7 +54,9 @@
 
 * We had to experiment with different parameters and options in the Whisper model to improve the accuracy of the transcriptions.
 
-* The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process. 
+* The video encoding process is limited by the system's current hardware. Using the default option (CPU) is usually slower, and in some cases, may not be able to encode videos at all. This is especially true for larger videos. Therefore, having a GPU is recommended for this process.
+
+* The application is currently capped at 10,000 requests per day. This is due to the limitations of the Youtube API. We are currently looking into ways to increase this limit to allow for more videos to be downloaded.
 
 >### Future Implementations
 
@@ -73,9 +80,9 @@
 
         git clone https://github.com/andy-1au/Special-Collections-Youtube-Downloader-Project.git
 
-    Note: This step will clone the existing repository and will get you all of the most recent code, although, you won't be able to push to the remote repository 
+    NOTE: This step will clone the existing repository and will get you all of the most recent code, although, you won't be able to push to the remote repository 
 
-    Note: When trying to match your local repository with the remote repository, type this in the terminal in the root folder of the repository: 
+    NOTE: When trying to match your local repository with the remote repository, type this in the terminal in the root folder of the repository: 
         
         git pull 
 
@@ -225,3 +232,72 @@ Make sure to add 'C:\Program Files\ffmpeg\bin' to your PATH environment variable
 
         make newFolder name=test
 
+>### Threading
+* If you are running the application via the CLI menu, you can use threading to speed up the process. The CLI has an option for running the script through single or multi-threading. 
+
+* If you are going to use the multi-threading option, you have to specify the number of threads that you want to use. Additionally, if you're using a commerical NVIDIA GPU (non-Tesla or Quadro series), you will have to bypass the NVIDIA drivers for their support of only 2 simultaneous sessions. Reference this [link](https://github.com/keylase/nvidia-patch/tree/master/win#version-table) for more information. 
+
+* NOTE: NVIDIA drivers currently only supports up to 5 simultaneous sessions according to their [website](https://developer.nvidia.com/video-encode-and-decode-gpu-support-matrix-new#Encoder). 
+
+>### How to get Youtube API Key
+
+1. Create a Google Developer Account [here](https://developers.google.com/)
+
+2. Create a new project
+
+3. On the project's dashboard, click Explore & Enable APIs
+
+4. In the library, navigate to YouTube Data APIv3 under YouTube APIs
+
+5. Enable the API
+
+6. Create a credential
+
+7. You will be given a API key
+
+>### Additional Information for Youtube API
+
+Run the following command in your terminal to install the google-api-python-client for Python 3:
+
+        pip install --upgrade google-api-python-client
+
+Then include the following import statement as well as the code below it and replace the ? with you API-Key in your Python script:
+
+        import googleapiclient.discovery 
+
+        googleapiclient.discovery.build("youtube", "v3", developerKey="?") 
+
+NOTE: Documentation for the YOUTUBE API V3 can be found [here](https://developers.google.com/youtube/v3/docs)
+
+NOTE: Documentation for further start-up guidance can be found [here](https://developers.google.com/youtube/v3/quickstart/python)
+
+>### How is the Youtube API used
+
+1. Using the YouTubeData API we can extract video metadata and channel metadata from the YouTube Database we are able to call Web Requests to the Youtube API and get the data we need.
+
+2. The API is capped at 10,000 requests per day, so we have to be careful with how many requests we make. If more request are needed contact YouTube for a higher limit. The link is provided [here](https://support.google.com/youtube/contact/yt_api_form)
+
+>### How is Metadata Saved?
+
+1. Metadata is saved as CSV format in the root directory of the repository. The name of the file is the name of the channel the video came from. For example, if the channel is named 'test', then the metadata will be saved in a file named 'test.csv'.
+
+2. The information that is saved in the CSV file is the channel_title, video_id, video_title, video_publishedAt, video_thumbnail, video_description
+
+## Credits and Acknowledgements
+
+### Team Members
+
+* Alex Japha - Project Manager
+  * Responsible for overseeing project planning, management, and coordination.
+* Andy Lau - Lead Developer, Tester
+  * Responsible for developing and implementing core video/audio downloading functions, including different types of video/audio formats, and video/audio conversion. 
+  * Implemented the project's user interface and ensuring seamless integration with various third-party technologies.
+  * Contributed to the development of the project's whisper audio transcription feature, utilizing advanced techniques to accurately transcribe audio files.
+  * Overall responsible for the project's quality assurance and testing.
+  * [Email: andyolau888@gmail.com](mailto:andyolau888@gmail.com), [Linkedin](https://www.linkedin.com/in/andy-1au/), [Github](https://github.com/andy-1au)
+* Dennis Lam - Developer
+  * Responsible for developing and implementing YOUTUBE API Web Requests to the Youtube Servers to get video metadata and channel metadata.
+  * Scraped video transcripts in SRT format from Youtube.
+
+## Copyright
+Copyright © 2023 by Andy Lau & Dennis Lam. All rights reserved. This project is licensed under the [MIT License](https://opensource.org/license/mit/). You are free to use and modify this project for personal or commercial purposes, provided that you give attribution to the original author and include the original license in any modified versions of the code.

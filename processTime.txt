@@ -16,8 +16,6 @@ UPDATE: h264_nvenc is slower by about 25%, but windows can play without extra ap
 
 UPDATE: Multi-thread works sometimes for some videos depending on max number of threads
 
-
-
 -----------------------
 RTX 3060
 3min.txt

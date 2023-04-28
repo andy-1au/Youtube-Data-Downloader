@@ -115,29 +115,6 @@ def downloadBoth(link, id):
 
     except Exception as e:
         print('Error: Unable to download audio and video files:', e)
-        
-        # Try downloading using CLI scripts
-        print("Attempting to download using CLI scripts...")
-
-        # Download video
-        os.system(f"pytube {link}")
-
-        # Get video name
-        videoObject = YouTube(link, on_progress_callback=on_progress)
-        videoName = videoObject.title
-
-        # Rename video file if user selected option 2
-        if fileNameFormat == "2":
-            videoName = re.sub(r'[.#%&{}\\<>*?/\$!\'\":@+`|=]', '', videoName) #delete special characters from video name to avoid errors
-            videoName = videoName + ".mp4"
-            print(f"Video Name: {videoName}") #DEBUG
-            # Rename video file
-            os.rename(f"{videoName}", f"{id}.mp4")
-            videoName = id + ".mp4"
-
-        # Move the video file to the combine folder 
-        os.move(f"{videoName}, {combineSP}")
-
 
 def multiThreadDownload(idList):  
     with ThreadPoolExecutor(max_workers=maxThreads) as executor: #thread limiting function
@@ -167,7 +144,7 @@ def menu(directory):
                 exit()
             elif int(choice) in range(1, len(files)+1): # Check if the user's input is a valid number
                 fileName = files[int(choice)-1] # Get the file name from the list, -1 because the list starts at 0
-                print(f"You selected {fileName}.")
+                print(f"\nYou selected {fileName}.")
                 break
             else:
                 print("Invalid input. Please try again.")
@@ -176,7 +153,7 @@ def menu(directory):
             print("Invalid input. Please try again.")
             continue
     
-    print("Please select an option for naming the downloaded files below:")
+    print("\nPlease select an option for naming the downloaded files below:")
     print("[1] By Original Name\n[2] By Video ID\n")
 
     while True:
@@ -207,10 +184,10 @@ def menu(directory):
             break
         elif downloadFormat == "2":
             while True:
-                numThreads = input("Enter the number of threads you want to use (2-4) (or Q to quit): ")
+                numThreads = input("Enter the number of threads you want to use, recommend 3-4 cores and no more than 5, as some videos may be corrupted during encoding (or Q to quit): ")
                 if numThreads.lower() == "q":
                     exit()
-                if numThreads.isdigit() and int(numThreads) in range(2, 5):
+                if numThreads.isdigit() and int(numThreads) in range(2, 6):
                     print(f"\nYour files will be downloaded using {numThreads} threads.")
                     break
                 else:
@@ -244,11 +221,12 @@ def menu(directory):
     return fileNameFormat, downloadFormat, selectedCodec, numThreads, fileName
 
 if __name__ == '__main__':
-    #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when testing the scripts
+    #NOTE: When using a new path, make sure to replace the backslash with forward slash. Relative pathing also works, and might be the best way to do it when running/testing the scripts
     # audioSP = Path("Insert Path Here")
     # videoSP = Path("Insert Path Here")
     # combineSP = Path("Insert Path Here")
-    audioSP = Path("Audios Folder")
+    # default paths
+    audioSP = Path("Audios Folder") 
     videoSP = Path("Videos Folder")
     combineSP = Path("Combine Folder")
     idSP = Path("ID Folder")

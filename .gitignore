@@ -1,11 +1,16 @@
 # Resource Folders
+Scripts/__pycache__
+.DS_Store
 Audios Folder
 Videos Folder
 Combine Folder
 Subtitles Folder
-Scripts Folder
-Subtitles Folder
+Transcripts Folder
 Metadata Folder
+
+# Resource Files
+front-end.pyt
+*.txt
 Scripts/__pycache__
 
 # Random Test Scripts
