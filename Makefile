@@ -24,6 +24,7 @@ do_all:
 	$(MAKE) f_info folder="$(folder)" && \
 	$(MAKE) vf_info folder="$(folder)" && \
 	$(MAKE) transfer folder="$(folder)" 
+	@echo "All targets completed"
 
 main_folders:
 	mkdir -p Audios\ Folder && \
@@ -39,6 +40,7 @@ main_folders:
 	echo Subtitles\ Folder >> .gitignore && \
 	echo Transcripts\ Folder >> .gitignore && \
 	echo Metadata\ Folder >> .gitignore
+	@echo "Main folders created"
 
 new_folder:
 	@if [ -z "$(name)" ]; then \
@@ -103,26 +105,32 @@ transfer:
 
 clean:
 	make clean_audio && make clean_video && make clean_combined && make clean_subtitles && make clean_transcripts
+	@echo "All folders cleaned"
 
 clean_audio:
 	cd Audios\ Folder/; \
 	rm -rf -- * 
+	@echo "Audios Folder cleaned"
 
 clean_video:
 	cd Videos\ Folder/; \
 	rm -rf -- *
+	@echo "Videos Folder cleaned"
 
 clean_combined:
 	cd Combine\ Folder/; \
 	rm -rf -- *
+	@echo "Combined Folder cleaned"
 
 clean_subtitles:
 	cd Subtitles\ Folder/; \
 	rm -rf -- *
+	@echo "Subtitles Folder cleaned"
 
 clean_transcripts:
 	cd Transcripts\ Folder/; \
 	rm -rf -- *
+	@echo "Transcripts Folder cleaned"
 
 help:
 	@echo "Available targets:"
