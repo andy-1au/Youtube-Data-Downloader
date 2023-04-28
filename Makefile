@@ -41,9 +41,10 @@ new_folder:
 	mkdir Transcripts Videos Metadata
 	@echo "New folder: $(name) created"
 
-transfer:
+copy:
 	@if [ -z "$(dst)" ]; then \
-		echo "Usage: make transfer dst=<destination_folder>"; \
+		echo "Copies files from $(source_folder) to destination folder"; \
+		echo "Usage: make copy dst=<destination_folder>"; \
 		exit 1; \
 	fi
 	@echo "Transferring files from $(source_folder) to $(dst)/Videos"
@@ -55,9 +56,10 @@ transfer:
 	@$(MAKE) clean_combined 
 	@echo "Transfer complete"
 
-move_folder:
+transfer:
 	@if [ -z "$(folder)" ]; then \
-		echo "Usage: make move_folder folder=<folder_name>"; \
+		echo "Transfers folder from $(C_PATH) to $(D_PATH)"; \
+		echo "Usage: make transfer folder=<folder_name>"; \
 		exit 1; \
 	fi
 	@echo "Moving folder $(folder) from $(C_PATH) to $(D_PATH)"
@@ -66,6 +68,7 @@ move_folder:
 
 f_info:
 	@if [ -z "$(folder)" ]; then \
+		echo "Prints the number of files and total size of $(folder)"; \
 		echo "Usage: make f_info folder=<folder_path>"; \
 		exit 1; \
 	fi
@@ -77,12 +80,13 @@ f_info:
 
 vf_info:
 	@if [ -z "$(folder)" ]; then \
+		echo "Prints the number of files and total size of $(folder)/Videos"; \
 		echo "Usage: make vf_info folder=<folder_path>"; \
 		exit 1; \
 	fi
-	@echo "Checking number of files and total size of $(folder)"
-	@file_count=`find "$(folder)" -type f | wc -l` && \
-	total_size=`du -sh "$(folder)" | cut -f1` && \
+	@echo "Checking number of files and total size of $(folder)/Videos"
+	@file_count=`find "$(folder)/Videos" -type f | wc -l` && \
+	total_size=`du -sh "$(folder)/Videos" | cut -f1` && \
 	echo "Number of files: $$file_count" && \
 	echo "Total size: $$total_size"
 
