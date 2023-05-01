@@ -8,6 +8,8 @@ result = model.transcribe("Audios Folder//ala.mp4", fp16=False)
 # Print the text
 print(result["text"])
 
+print(result)
+
 # Print the text with timestamps
 for line in result["lines"]:
     print(line["start"], line["end"], line["text"])
