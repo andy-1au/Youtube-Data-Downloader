@@ -1,6 +1,4 @@
 # Resource Folders
-Scripts/__pycache__
-.DS_Store
 Audios Folder
 Videos Folder
 Combine Folder
@@ -10,8 +8,8 @@ Metadata Folder
 
 # Resource Files
 front-end.pyt
-*.txt
 Scripts/__pycache__
+.DS_Store
 
 # Random Test Scripts
 test.py
