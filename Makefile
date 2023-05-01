@@ -14,6 +14,9 @@ gui:
 check: 
 	python Scripts/Check.py
 
+transcribe: 
+	python Scripts/Transcribe.py
+
 do_all:
 	@if [ -z "$(folder)" ]; then \
 		echo "Calls all targets (copy, info, transfer) in the correct order"; \
@@ -138,6 +141,7 @@ help:
 	@echo "  run_old           - Runs the Download.py script"
 	@echo "  gui               - Runs the GUI.py script"
 	@echo "  check             - Runs the Check.py script"
+	@echo "  transcribe        - Runs the Transcribe.py script"
 	@echo "  do_all            - Calls all targets (copy, info, transfer) in the correct order"
 	@echo "  main_folders      - Creates the main folders and adds them to .gitignore"
 	@echo "  new_folder        - Creates a new folder with Transcripts, Videos, and Metadata subfolders"
