@@ -46,16 +46,16 @@ main_folders:
 	@echo "Main folders created"
 
 new_folder:
-	@if [ -z "$(name)" ]; then \
-		echo "Usage: make new_folder name=<folder_name>"; \
+	@if [ -z "$(folder)" ]; then \
+		echo "Usage: make new_folder folder=<folder_name>"; \
 		exit 1; \
 	fi
 	@echo "" >> .gitignore && \
-	echo $(name) >> .gitignore && \
-	mkdir "$(name)" && \
-	cd "$(name)" && \
+	echo $(folder) >> .gitignore && \
+	mkdir "$(folder)" && \
+	cd "$(folder)" && \
 	mkdir Transcripts Videos Metadata
-	@echo "New folder: $(name) created"
+	@echo "New folder: $(folder) created"
 
 copy:
 	@if [ -z "$(folder)" ]; then \
