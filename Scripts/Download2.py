@@ -103,7 +103,7 @@ if __name__ == '__main__':
         'n_threads': 8, # not sure if this is working
 
         # Conflict Resolution Options
-        'nooverwrites': False, # Set this to False if you accidentally stopped in the middle of a download (default: True)
+        'nooverwrites': True, # Set this to False if you accidentally stopped in the middle of a download (default: True)
 
         # External Downloader Options
         'external_downloader': 'ffmpeg',
