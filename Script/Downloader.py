@@ -1,5 +1,4 @@
 import yt_dlp
-import os
 import csv
 import threading
 import multiprocessing
@@ -26,8 +25,6 @@ yt_dlp_captions_options = {
     'subtitlesformat': 'srt',
     'writeautomaticsub': True,
 }
-
-#dict_keys(['id', 'title', 'formats', 'thumbnails', 'thumbnail', 'description', 'uploader', 'uploader_id', 'uploader_url', 'channel_id', 'channel_url', 'duration', 'view_count', 'average_rating', 'age_limit', 'webpage_url', 'categories', 'tags', 'playable_in_embed', 'live_status', 'release_timestamp', '_format_sort_fields', 'automatic_captions', 'subtitles', 'comment_count', 'chapters', 'like_count', 'channel', 'channel_follower_count', 'upload_date', 'availability', 'original_url', 'webpage_url_basename', 'webpage_url_domain', 'extractor', 'extractor_key', 'playlist_count', 'playlist', 'playlist_id', 'playlist_title', 'playlist_uploader', 'playlist_uploader_id', 'n_entries', 'playlist_index', '__last_playlist_index', 'playlist_autonumber', 'display_id', 'fulltitle', 'duration_string', 'is_live', 'was_live', 'requested_subtitles', '_has_drm', 'requested_formats', 'format', 'format_id', 'ext', 'protocol', 'language', 'format_note', 'filesize_approx', 'tbr', 'width', 'height', 'resolution', 'fps', 'dynamic_range', 'vcodec', 'vbr', 'stretched_ratio', 'aspect_ratio', 'acodec', 'abr', 'asr', 'audio_channels'])
 
 def extract_metadata(channel_url, output_path):
     """_summary_
@@ -181,4 +178,3 @@ def main(channel_url, video_id_output_path, metadata_output_path, captions_outpu
     extract_captions(video_id_list, captions_output_path, channel_name)
     extract_metadata_threaded(metadata_output_path, video_id_list, channel_name)
     
-main('https://www.youtube.com/channel/UCGgkJ72TwkiIGuA40HagpPw', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/IDS', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/Metadata', '/Users/dennis/Work Study/Special-Collections-Youtube-Downloader-Project/Transcript')
