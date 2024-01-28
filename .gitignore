@@ -2,3 +2,6 @@ IDS
 Metadata
 Transcript
 .DS_Store
+GUI.spec
+/dist
+/build

@@ -2,9 +2,8 @@ import yt_dlp
 import csv
 import threading
 import multiprocessing
+import time
 from collections import deque
-
-
         
 yt_dlp_id_options = {
     'skip_download': True,
@@ -28,7 +27,7 @@ yt_dlp_captions_options = {
 
 def extract_metadata(channel_url, output_path):
     """_summary_
-        This function is slow, but it works. It extracts metadata from a channel and saves it to a csv file in the out put path.
+        This function is slow. It extracts metadata from a channel and saves it to a csv file in the out put path.
     Args:
         channel_url (_type_): _description_
         output_path (_type_): _description_
@@ -62,10 +61,16 @@ def extract_metadata(channel_url, output_path):
     return metadata
 
 def extract_metadata_threaded(metadata_put_path, video_id_list, channel_name):
-    
+    """_summary_
+
+    Args:
+        metadata_put_path (_type_): _description_
+        video_id_list (_type_): _description_
+        channel_name (_type_): _description_
+    """
     num_cpus = multiprocessing.cpu_count()
 
-    num_threads = int(num_cpus*0.3)
+    num_threads = int(num_cpus*0.3) # make this use about 30% of the avaliable cpu
 
     if(num_threads % 2 != 0):
         num_threads += 1
@@ -84,6 +89,9 @@ def extract_metadata_threaded(metadata_put_path, video_id_list, channel_name):
     for i in range(len(deque_video_id)):
         thread.append(threading.Thread(target=extract_metadata_threaded_helper, args=(deque_video_id[i], metadata_put_path+channel_name+".csv")))
         thread[i].start()
+        
+    for i in range(len(thread)): # this is to make sure the main thread waits for all the threads to finish so the program doesn't run again before the threads finish
+        thread[i].join()
     
 def extract_metadata_threaded_helper(video_id_list, output_path):
     
@@ -171,10 +179,37 @@ def extract_captions(video_id_list, output_path, channel_name):
         ydl.download(['https://www.youtube.com/watch?v='+video])
 
     
-def main(channel_url, video_id_output_path, metadata_output_path, captions_output_path):
-    result = extract_video_ids_threaded(channel_url, video_id_output_path)
-    channel_name = result[0]
-    video_id_list = result[1]
-    extract_captions(video_id_list, captions_output_path, channel_name)
-    extract_metadata_threaded(metadata_output_path, video_id_list, channel_name)
+def main(channel_url, video_id_output_path, metadata_output_path, captions_output_path):   
     
+    t = time.process_time()
+    channel_name = ""
+    video_id_list = []
+    elapsed_time = 0
+    
+    if(channel_url == ""):
+        print("Error ", "Invalid URL: ", channel_url)
+        return "Error Invalid URL: "+channel_url
+    elif(video_id_output_path == ""):
+        print("Error ", "Empty Video_Output_Path ", video_id_output_path)
+        return "Error Empty Video_Output_Path: "+video_id_output_path
+    elif(metadata_output_path == ""):
+        print("Error ", "Empty Metadata_Output_Path ", metadata_output_path)
+        return "Error Empty Metadata_Output_Path: "+metadata_output_path
+    elif(captions_output_path == ""):
+        print("Error ", "Empty Captions_Output_Path ", captions_output_path)
+        return "Error Empty Captions_Output_Path: "+captions_output_path
+    
+    try:
+        result = extract_video_ids_threaded(channel_url, video_id_output_path)
+        channel_name = result[0]
+        video_id_list = result[1]
+        extract_captions(video_id_list, captions_output_path, channel_name)
+        extract_metadata_threaded(metadata_output_path, video_id_list, channel_name)
+         #do some stuff
+        elapsed_time = time.process_time() - t
+        print("Elapsed time: ", elapsed_time)
+    except Exception as e:
+        print("Error ", "Invalid URL: ", channel_url)
+        return "Error Invalid URL: "+channel_url
+   
+    return "Success", elapsed_time
